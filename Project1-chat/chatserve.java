@@ -228,7 +228,6 @@ public class chatserve {
         } catch (Exception e) {  //Invalid serverName.
             System.err.println("Invalid serverName.\n");
             System.exit(1);
-            ;  //close program
         }
     }
 
@@ -252,7 +251,7 @@ public class chatserve {
         return true;
     }
 
-    public static boolean processOutput(ServerSocket server) {
+    public static boolean processOutput(Socket client) {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out = new PrintWriter(server.getOutputStream(), true);
 
@@ -280,7 +279,7 @@ public class chatserve {
                 break;
             }
 
-            if (!processOutput(server)) {
+            if (!processOutput(client)) {
                 termConnection(client);
                 break;
             }
