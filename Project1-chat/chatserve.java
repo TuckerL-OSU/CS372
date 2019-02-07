@@ -202,7 +202,7 @@ public class chatserve {
 
     // pass servers socket
     // need a way to send server name
-    public static Socket estConnection(int server) {
+    public static Socket estConnection(Socket server) {
         try (
                 Socket client = server.accept();
                 BufferedReader clientSYN = new BufferedReader(new InputStreamReader(System.in));
@@ -212,7 +212,7 @@ public class chatserve {
             out.println(serverName);
             return client;
         } catch (Exception ie) {
-            return -1;
+            System.exit(1);
         }
     }
 
@@ -223,7 +223,7 @@ public class chatserve {
             serverName = consoleInput.readLine();
         } catch (Exception e) {  //Invalid serverName.
             System.err.println("Invalid serverName.\n");
-            return;  //close program
+            System.exit(1);;  //close program
         }
     }
 
@@ -268,7 +268,7 @@ public class chatserve {
         }
     }
 
-    public static void chat(Socket server, Socket client) {
+    public static void chat(ServerSocket server, Socket client) {
         while (true) {
             if (!processInput(client)) {
                 termConnection(client);
@@ -295,8 +295,8 @@ public class chatserve {
 
     public static void main(String[] args) {
         // Usage statement in case of incorrect args input.
-        Socket server = 0; //port number (input by user)
-        Socket client = 0;
+        ServerSocket server;
+        Socket client;
 
         // arguments bad
         if (args.length != 1) {
@@ -309,13 +309,13 @@ public class chatserve {
         int port = Integer.parseInt(args[0]);
         server = initServer(port);
 
-        if (server == -1) {
+        if (!server) {
             System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
         } else {
             System.out.println(serverName + " started on port: " + port + ".\n");
             while (true) {
                 client = waitForConn(server);
-                if (client == -1) {
+                if (!client) {
                     System.out.println(serverName + " failed to connect to client.\n");
                 } else {
                     System.out.println(clientName + " has successfully connected.\n");
