@@ -306,7 +306,7 @@ public class chatserve {
             getName();
         }
 
-        int port = Integer.parseInt(args[0])
+        int port = Integer.parseInt(args[0]);
         server = initServer(port);
 
         if (server == -1) {
@@ -318,7 +318,7 @@ public class chatserve {
                 if (client == -1) {
                     System.out.println(serverName + " failed to connect to client.\n");
                 } else {
-                    System.out.println(clientName + " has successfully connected.\n")
+                    System.out.println(clientName + " has successfully connected.\n");
                     chat(server, client);
                 }
             }
