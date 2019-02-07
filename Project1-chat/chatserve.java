@@ -254,21 +254,21 @@ public class chatserve {
 
     public static boolean processOutput(Socket client) {
         String input = "";
-        try {
+        try (
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+        ) {
             input = in.readLine();
+            if (input.contains("\\quit")) {
+                System.out.println("You closed the connection with: " + clientName + ".\n");
+                return false;
+            } else {
+                out.println(serverName + input);
+                return true;
+            }
         } catch (Exception e) {
             System.err.println("Invalid input\n");
             return false;
-        }
-
-        if (input.contains("\\quit")) {
-            System.out.println("You closed the connection with: " + clientName + ".\n");
-            return false;
-        } else {
-            out.println(serverName + input);
-            return true;
         }
     }
 
