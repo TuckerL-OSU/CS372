@@ -221,7 +221,7 @@ public class chatserve {
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
         try {  //Read user input from terminal.
             serverName = consoleInput.readLine();
-        } catch(Exception e) {  //Invalid serverName.
+        } catch (Exception e) {  //Invalid serverName.
             System.err.println("Invalid serverName.\n");
             return;  //close program
         }
@@ -233,8 +233,7 @@ public class chatserve {
         String input = "";
         try {  //Read from the socket.
             input = in.readLine();
-        }
-        catch(IOException ie) {
+        } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected\n");
             return false;  //Return to main to end the program.
         }
@@ -263,8 +262,7 @@ public class chatserve {
         if (input.contains("\\quit")) {
             System.out.println("You closed the connection with: " + clientName + ".\n");
             return false;
-        }
-        else {
+        } else {
             out.println(serverName + input);
             return true;
         }
@@ -286,11 +284,12 @@ public class chatserve {
 
     public static void termConnection(Socket client) {
         try {
-
             client.close();
         } catch (Exception e) {
             System.out.println("Error closing connection with " + clientName + ".\n");
+            System.exit(1);
         }
+    }
 
     // PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 
@@ -303,79 +302,78 @@ public class chatserve {
         if (args.length != 1) {
             System.err.println("Incorrect Arguments. Try: \"java chatserve [port]\"\n");
             return;  //Close program.
-        }
-        else {
+        } else {
             getName();
         }
 
         server = initServer(args[0]);
         if (server == -1) {
             System.out.println("Failed to start " + serverName + " on port: " + args[0] + ".\n");
-        }
-        else {
+        } else {
             System.out.println(serverName + " started on port: " + port + ".\n");
             while (1) {
                 client = waitForConn(server);
                 if (client == -1) {
                     System.out.println(serverName + "failed to connect to client.\n");
-                }
-                else {
+                } else {
                     chat(server, client);
                 }
             }
         }
     }
-
-
-
-    System.out.print("Welcome to chatserver on port " + port +
-                "\nPlease enter a serverName: ");
-
-        /* Help with terminal input athspk's answer on the following page:
-         * http://stackoverflow.com/questions/4644415/java-how-to-get-input-from-system-console
-         */
-
-        /**
-         * The main loop of Chatserve.
-         * Each iteration is a different client connection.
-         */
-        while (true) {
-
-            System.out.println("Waiting for a connection...");
-
-            /* Code help obtained from docs.oracle.com/javase/tutorial/networking/sockets/clientServer.html */
-            try (  //try-with-resources: set up socket, wait for client, set up streams.
-                   ServerSocket serverSocket = new ServerSocket(port);
-                   Socket clientSocket = serverSocket.accept();
-                   PrintWriter out =
-                           new PrintWriter(clientSocket.getOutputStream(), true);
-                   BufferedReader in = new BufferedReader(
-                           new InputStreamReader(clientSocket.getInputStream()));
-            ) {
-                System.out.println("A client has connected. Awaiting initial message. . .");
-                out.println(serverName);
-
-                /**
-                 * The connection loop.
-                 * Each iteration is 1 message exchange
-                 */
-                while (true) {
-                    // Print message from client.
-                    if (!processInput(clientSocket, in)) {
-                        closeClient(clientSocket);
-                        break;
-                    }
-
-                    // Send message from server user.
-                    if (!processOutput(serverName, consoleInput, out)) {
-                        closeClient(clientSocket);
-                        break;
-                    }
-                }
-
-            } catch (Exception ie) {
-                return;  //close program on error.
-            }  //Client loop
-        }  //Main loop
-    }
 }
+
+
+
+
+//    System.out.print("Welcome to chatserver on port " + port +
+//                "\nPlease enter a serverName: ");
+//
+//        /* Help with terminal input athspk's answer on the following page:
+//         * http://stackoverflow.com/questions/4644415/java-how-to-get-input-from-system-console
+//         */
+//
+//        /**
+//         * The main loop of Chatserve.
+//         * Each iteration is a different client connection.
+//         */
+//        while (true) {
+//
+//            System.out.println("Waiting for a connection...");
+//
+//            /* Code help obtained from docs.oracle.com/javase/tutorial/networking/sockets/clientServer.html */
+//            try (  //try-with-resources: set up socket, wait for client, set up streams.
+//                   ServerSocket serverSocket = new ServerSocket(port);
+//                   Socket clientSocket = serverSocket.accept();
+//                   PrintWriter out =
+//                           new PrintWriter(clientSocket.getOutputStream(), true);
+//                   BufferedReader in = new BufferedReader(
+//                           new InputStreamReader(clientSocket.getInputStream()));
+//            ) {
+//                System.out.println("A client has connected. Awaiting initial message. . .");
+//                out.println(serverName);
+//
+//                /**
+//                 * The connection loop.
+//                 * Each iteration is 1 message exchange
+//                 */
+//                while (true) {
+//                    // Print message from client.
+//                    if (!processInput(clientSocket, in)) {
+//                        closeClient(clientSocket);
+//                        break;
+//                    }
+//
+//                    // Send message from server user.
+//                    if (!processOutput(serverName, consoleInput, out)) {
+//                        closeClient(clientSocket);
+//                        break;
+//                    }
+//                }
+//
+//            } catch (Exception ie) {
+//                return;  //close program on error.
+//            }  //Client loop
+//        }  //Main loop
+//    }
+//}
