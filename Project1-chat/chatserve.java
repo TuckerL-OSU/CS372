@@ -196,7 +196,7 @@ public class chatserve {
         ) {
             return serverSocket;
         } catch (Exception ie) {
-            return -1;  //close program on error.
+            System.exit(1);  //close program on error.
         }
     }
 
@@ -227,7 +227,7 @@ public class chatserve {
         }
     }
 
-    public static bool processInput(Socket client) {
+    public static boolean processInput(Socket client) {
         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
         String input = "";
@@ -247,7 +247,7 @@ public class chatserve {
         return true;
     }
 
-    public static bool processOutput() {
+    public static boolean processOutput(client) {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 
@@ -269,7 +269,7 @@ public class chatserve {
     }
 
     public static void chat(Socket server, Socket client) {
-        while (1) {
+        while (true) {
             if (!processInput(client)) {
                 termConnection(client);
                 break;
@@ -295,8 +295,8 @@ public class chatserve {
 
     public static void main(String[] args) {
         // Usage statement in case of incorrect args input.
-        int server = 0; //port number (input by user)
-        int client = 0;
+        Socket server = 0; //port number (input by user)
+        Socket client = 0;
 
         // arguments bad
         if (args.length != 1) {
@@ -306,16 +306,19 @@ public class chatserve {
             getName();
         }
 
-        server = initServer(args[0]);
+        int port = Integer.parseInt(args[0])
+        server = initServer(port);
+
         if (server == -1) {
-            System.out.println("Failed to start " + serverName + " on port: " + args[0] + ".\n");
+            System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
         } else {
             System.out.println(serverName + " started on port: " + port + ".\n");
-            while (1) {
+            while (true) {
                 client = waitForConn(server);
                 if (client == -1) {
-                    System.out.println(serverName + "failed to connect to client.\n");
+                    System.out.println(serverName + " failed to connect to client.\n");
                 } else {
+                    System.out.println(clientName + " has successfully connected!\n")
                     chat(server, client);
                 }
             }
