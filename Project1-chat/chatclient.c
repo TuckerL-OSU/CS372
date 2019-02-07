@@ -11,7 +11,6 @@ void error(int exitCode, const char *msg) {
 	// for debugging and potential future use
 	fprintf(stderr, "%s\n", msg);
 
-	// if the exitCode is -1, dont exit
 	exit(exitCode);
 }
 
@@ -47,7 +46,7 @@ int estConnection(int sockfd, struct addrinfo *conn) {
 	int status = 0;
 
 	if ((status = connect(sockfd, conn->ai_addr, conn->ai_addrlen)) == -1) {
-		error(3, "Failed to establish connection to server.\n");
+		error(3, "Failed to establish connection to Server.\n");
 	}
 
 	return status;
@@ -69,14 +68,12 @@ int connectToServer(int numArgs, char **args) {
 	return -2;
 }
 
-// this is potential problems
-int chat(int sockfd, char *clientName) {
-	int bytes = 0;
-	int status;
+int chat(int sockfd, char *clientName, char *serverName) {
 	// buffers to hold input/output
 	char input[500];
 	char output[500];
-
+	
+	// clear stdin
 	fgets(input, sizeof(input), stdin);
 
 	while (1) {
@@ -94,30 +91,38 @@ int chat(int sockfd, char *clientName) {
 		}
 
 		// number of bytes sent
-		bytes = send(sockfd, input, strlen(input), 0);
+		int bytes = send(sockfd, input, strlen(input), 0);
 		if (bytes == -1) {
 			error(4, "Data not sent correctly.\n");
 		}
 
 		// check for errors upon recieving response
-		status = recv(sockfd, output, 500, 0);
+		int status = recv(sockfd, output, 500, 0);
 		if (status == -1) {
-			error(5, "Data no recieved correctly.\n");
+			error(5, "Data not recieved correctly.\n");
 		}
 		else if (status == 0) {
-			printf("Connection terminated by server.\n");
+			printf("Connection Terminated by Server.\n");
+			break;
 		}
 		else {
-			printf("%s\n", output);
+			printf("%s> %s\n", serverName, output);
 		}
 	}
 
 	close(sockfd);
-	printf("Connection Terminated.\n");
+	printf("Connection Closed.\n");
+}
+
+// save the state of sockfd to preserve client and server names
+void saveState(int sockfd, char *clientName, char *serverName) {
+	int client = send(sockfd, clientName, strlen(clientName), 0);
+	int server = recv(sockfd, serverName, 10, 0);
 }
 
 int main(int argc, char *argv[]) {
 	char clientName[10];
+	char serverName[10];
 
 	// we need 3 arguments to start the client. [command] [server] [port]
 	if (argc != 3) {
@@ -134,7 +139,8 @@ int main(int argc, char *argv[]) {
 		error(sockfd, "Error in main\n");
 	}
 	else {
-		chat(sockfd, clientName);
+		saveState(sockfd, clientName, serverName);
+		chat(sockfd, clientName, serverName);
 	}
 
 	return 0;
