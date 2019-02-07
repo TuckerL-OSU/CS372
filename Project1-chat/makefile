@@ -11,4 +11,4 @@ all: $(classes) chatclient
 	$(JAVAC) $<
 
 clean:
-	rm -f *.class chatClient
+	rm -f *.class chatclient

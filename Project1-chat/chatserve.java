@@ -190,58 +190,81 @@ public class chatserve {
 //    public static String serverName = ""; //The Server's screen name
 //    public static String clientName = ""; //The client's screen name
 //
+//    public static ServerSocket initServer(int port) {
+//        try (  //try-with-resources: set up socket, wait for client, set up streams.
+//               ServerSocket serverSocket = new ServerSocket(port);
+//        ) {
+//            return serverSocket;
+//        } catch (Exception ie) {
+//            return -1;  //close program on error.
+//        }
+//    }
+//
+//    // pass servers socket
+//    public static Socket waitForConn(int server) {
+//        try (
+//                Socket client = server.accept();
+//        ) {
+//            return client;
+//        } catch (Exception ie) {
+//            return -1;
+//        }
+//    }
+//
+//    public static void getName() {
+//        System.out.print("Enter a name for this Server (10 characters max): ");
+//        BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+//        try {  //Read user input from terminal.
+//            serverName = consoleInput.readLine();
+//        } catch(Exception e) {  //Invalid serverName.
+//            System.err.println("Invalid serverName.\n");
+//            return;  //close program
+//        }
+//    }
+//
+//    public static int getInput(Socket client) {
+//        asdf;
+//    }
+//
 //    public static void main(String[] args) {
 //        // Usage statement in case of incorrect args input.
-//        int port = 0; //port number (input by user)
+//        int server = 0; //port number (input by user)
+//        int client = 0;
 //
 //        // arguments bad
 //        if (args.length != 1) {
-//            System.err.println("Incorrect Arguments. Try: java chatserve [port]\n" + Usage);
+//            System.err.println("Incorrect Arguments. Try: \"java chatserve [port]\"\n");
 //            return;  //Close program.
 //        }
-//
-//        /* CLI parsing help obtained from
-//         * docs.oracle.com/javase/tutorial/essential/environment/cmdLineArgs.html*/
 //        else {
-//            try {   //Verify user inputted port number.
-//                port = Integer.parseInt(args[0]);
-//            } catch (NumberFormatException e) {
-//                System.err.println("Port argument must be an integer.\n" + Usage);
-//                return;  //Close program.
-//            }
+//            getName();
 //        }
 //
-//        // Valid port number entered. Get user to input username.
+//        server = initServer(args[0]);
+//        if (server == -1) {
+//            System.out.println("Failed to start " + serverName + " on port: " + args[0] + ".\n");
+//        }
+//        else {
+//            System.out.println(serverName + " started on port: " + port + ".\n");
+//            client = waitForConn(server);
+//            if (client == -1) {
+//                System.out.println(serverName + "failed to connect to client.\n");
+//            }
+//            else {
+//                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+//                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//            }
+//        }
+//    }
 //
-//        System.out.print("Welcome to chatserver on port " +
-//                Integer.toString(port) +
+//
+//
+//    System.out.print("Welcome to chatserver on port " + port +
 //                "\nPlease enter a serverName: ");
 //
 //        /* Help with terminal input athspk's answer on the following page:
 //         * http://stackoverflow.com/questions/4644415/java-how-to-get-input-from-system-console
 //         */
-//
-//        // User input stream.
-//        BufferedReader consoleInput =  new BufferedReader(new InputStreamReader(System.in));
-//        try {  //Read user input from terminal.
-//            serverName = consoleInput.readLine();
-//            if (serverName.length() > 10) {  //serverName is too long: truncate.
-//                serverName = serverName.substring(0, 10);
-//                System.out.println("serverName truncated to: " + serverName);
-//                // } else {  //Pad inputted serverName with underscores (removed on print)
-//                // int spaces = 10 - serverName.length();
-//                // for (int i = 0; i < spaces; i++) {
-//                // serverName += '_';
-//                // }
-//
-//                // Print accepted username
-//                // System.out.println("serverName: " + serverName.replace("_", ""));
-//                System.out.println("serverName: " + serverName);
-//            }
-//        } catch(Exception e) {  //Invalid serverName.
-//            System.err.println("\nInvalid serverName input. ");
-//            return;  //close program
-//        }
 //
 //        /**
 //         * The main loop of Chatserve.
