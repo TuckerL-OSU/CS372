@@ -199,6 +199,7 @@ public class chatserve {
         } catch (Exception ie) {
             System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
             System.exit(1);  //close program on error.
+            return;
         }
     }
 
@@ -217,6 +218,7 @@ public class chatserve {
         } catch (Exception ie) {
             System.out.println(serverName + " failed to connect to client.\n");
             System.exit(1);
+            return;
         }
     }
 
@@ -228,6 +230,7 @@ public class chatserve {
         } catch (Exception e) {  //Invalid serverName.
             System.err.println("Invalid serverName.\n");
             System.exit(1);
+            return;
         }
     }
 
