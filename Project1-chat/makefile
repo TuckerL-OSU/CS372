@@ -1,4 +1,4 @@
-default: chatclient.c
+default: chatclient.c chatserve.java
 	gcc -o chatclient chatclient.c
     javac chatserve.java
 
