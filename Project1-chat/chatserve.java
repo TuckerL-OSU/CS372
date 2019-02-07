@@ -208,8 +208,8 @@ public class chatserve {
     public static Socket estConnection(ServerSocket server) {
         try (
                 Socket client = server.accept();
-                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(System.in));
-                PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+//                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(System.in));
+//                PrintWriter out = new PrintWriter(client.getOutputStream(), true);
         ) {
 //            clientName = clientSYN.readLine();
 //            out.println(serverName);
