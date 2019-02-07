@@ -32,7 +32,7 @@ public class chatserve {
         // System.out.println(clientName + ">" + msg);
         // System.out.print(serverName.replace("_", "") + "> ");
 
-        String msg = inputLine.substring(clientName.length, inputLine.indexOf("\0"));
+        String msg = inputLine.substring(clientName.length(), inputLine.indexOf("\0"));
         System.out.println(clientName + "> " + msg);
         System.out.print(serverName + "> ");
         return true;
