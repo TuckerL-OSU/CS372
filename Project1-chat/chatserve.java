@@ -318,7 +318,7 @@ public class chatserve {
                 if (client == -1) {
                     System.out.println(serverName + " failed to connect to client.\n");
                 } else {
-                    System.out.println(clientName + " has successfully connected!\n")
+                    System.out.println(clientName + " has successfully connected.\n")
                     chat(server, client);
                 }
             }
