@@ -247,7 +247,7 @@ public class chatserve {
         return true;
     }
 
-    public static boolean processOutput(client) {
+    public static boolean processOutput(Socket client) {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 
