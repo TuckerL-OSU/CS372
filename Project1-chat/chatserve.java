@@ -199,7 +199,7 @@ public class chatserve {
         } catch (IOException ie) {
             System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
             System.exit(1);  //close program on error.
-            return NULL;
+            return null;
         }
     }
 
@@ -218,7 +218,7 @@ public class chatserve {
         } catch (IOException ie) {
             System.out.println(serverName + " failed to connect to client.\n");
             System.exit(1);
-            return NULL;
+            return null;
         }
     }
 
