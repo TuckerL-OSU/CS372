@@ -211,8 +211,8 @@ public class chatserve {
                 BufferedReader clientSYN = new BufferedReader(new InputStreamReader(System.in));
                 PrintWriter out = new PrintWriter(client.getOutputStream(), true);
         ) {
-            clientName = clientSYN.readLine();
-            out.println(serverName);
+//            clientName = clientSYN.readLine();
+//            out.println(serverName);
             System.out.println(clientName + " has successfully connected.\n");
             return client;
         } catch (IOException ie) {
