@@ -253,7 +253,7 @@ public class chatserve {
 
     public static boolean processOutput(Socket client) {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        PrintWriter out = new PrintWriter(server.getOutputStream(), true);
+        PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 
         String input = "";
         try {
