@@ -199,6 +199,7 @@ public class chatserve {
         } catch (IOException ie) {
             System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
             System.exit(1);  //close program on error.
+            return ie;
         }
     }
 
@@ -217,6 +218,7 @@ public class chatserve {
         } catch (IOException ie) {
             System.out.println(serverName + " failed to connect to client.\n");
             System.exit(1);
+            return ie;
         }
     }
 
@@ -232,10 +234,9 @@ public class chatserve {
     }
 
     public static boolean processInput(Socket client) {
-        BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-
-        String input = "";
+               String input = "";
         try {  //Read from the socket.
+            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             input = in.readLine();
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected\n");
@@ -252,11 +253,10 @@ public class chatserve {
     }
 
     public static boolean processOutput(Socket client) {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-
         String input = "";
         try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            PrintWriter out = new PrintWriter(client.getOutputStream(), true);
             input = in.readLine();
         } catch (Exception e) {
             System.err.println("Invalid input\n");
