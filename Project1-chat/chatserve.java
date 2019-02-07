@@ -195,11 +195,11 @@ public class chatserve {
                ServerSocket serverSocket = new ServerSocket(port);
         ) {
             System.out.println(serverName + " started on port: " + port + ".\n");
+            return serverSocket;
         } catch (Exception ie) {
             System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
             System.exit(1);  //close program on error.
         }
-        return serverSocket;
     }
 
     // pass servers socket
@@ -213,11 +213,11 @@ public class chatserve {
             clientName = clientSYN.readLine();
             out.println(serverName);
             System.out.println(clientName + " has successfully connected.\n");
+            return client;
         } catch (Exception ie) {
             System.out.println(serverName + " failed to connect to client.\n");
             System.exit(1);
         }
-        return client;
     }
 
     public static void getName() {
