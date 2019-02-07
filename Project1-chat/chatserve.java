@@ -39,14 +39,14 @@ public class chatserve {
                     break;
                 }
                 System.out.println(clientResp);
-                System.out.print(handle);
+                System.out.print(serverName);
                 sentence = hosta.nextLine();
                 //server calls \quit
                 if(sentence.equals(quit)) {
                     out.println(sentence);
                     break;
                 }
-                out.println(handle + "> " + sentence);
+                out.println(serverName + "> " + sentence);
             }
 
             // close IO streams, then socket
