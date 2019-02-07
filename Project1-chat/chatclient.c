@@ -1,4 +1,7 @@
-
+// Tucker Lavell
+// CS372 - Winter 2019
+// Project 1 - chatclient.c
+// much of the code was taken from beej's code samples and suggestions
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -129,7 +132,7 @@ int main(int argc, char *argv[]) {
 		error(1, "Incorrect. Try \"./chatclient [server] [port-on-server]\"\n");
 	}
 	else {
-		printf("Enter a username (up to 10 characters): ");
+		printf("Enter a Username (10 characters max): ");
 		// no input validation here please don't try to break it
 		scanf("%s", clientName);
 	}
