@@ -194,15 +194,17 @@ public class chatserve {
         try (  //try-with-resources: set up socket, wait for client, set up streams.
                ServerSocket serverSocket = new ServerSocket(port);
         ) {
+            System.out.println(serverName + " started on port: " + port + ".\n");
             return serverSocket;
         } catch (Exception ie) {
+            System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
             System.exit(1);  //close program on error.
         }
     }
 
     // pass servers socket
     // need a way to send server name
-    public static Socket estConnection(Socket server) {
+    public static Socket estConnection(ServerSocket server) {
         try (
                 Socket client = server.accept();
                 BufferedReader clientSYN = new BufferedReader(new InputStreamReader(System.in));
@@ -210,8 +212,10 @@ public class chatserve {
         ) {
             clientName = clientSYN.readLine();
             out.println(serverName);
+            System.out.println(clientName + " has successfully connected.\n");
             return client;
         } catch (Exception ie) {
+            System.out.println(serverName + " failed to connect to client.\n");
             System.exit(1);
         }
     }
@@ -223,7 +227,8 @@ public class chatserve {
             serverName = consoleInput.readLine();
         } catch (Exception e) {  //Invalid serverName.
             System.err.println("Invalid serverName.\n");
-            System.exit(1);;  //close program
+            System.exit(1);
+            ;  //close program
         }
     }
 
@@ -309,19 +314,9 @@ public class chatserve {
         int port = Integer.parseInt(args[0]);
         server = initServer(port);
 
-        if (!server) {
-            System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
-        } else {
-            System.out.println(serverName + " started on port: " + port + ".\n");
-            while (true) {
-                client = waitForConn(server);
-                if (!client) {
-                    System.out.println(serverName + " failed to connect to client.\n");
-                } else {
-                    System.out.println(clientName + " has successfully connected.\n");
-                    chat(server, client);
-                }
-            }
+        while (true) {
+            client = estConnection(server);
+            chat(server, client);
         }
     }
 }
