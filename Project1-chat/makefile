@@ -1,6 +1,14 @@
+JAVAC=javac
+sources = $(wildcard *.java)
+classes = $(sources:.java=.class)
+
 default: chatclient.c chatserve.java
 	gcc -o chatclient chatclient.c
-    javac chatserve.java
+
+all: $(classes) chatclient
+
+%.class : %.java
+	$(JAVAC) $<
 
 clean:
 	rm -f *.class chatClient
