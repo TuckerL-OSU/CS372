@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
 
 	// we need 3 arguments to start the client. [command] [server] [port]
 	if (argc != 3) {
-		error(1, "Incorrect. Try \"./chatclient [server] [port-on-server]\"\n");
+		error(1, "Incorrect Arguments. Try \"./chatclient [server] [port-on-server]\"\n");
 	}
 	else {
 		printf("Enter a Username (10 characters max): ");
