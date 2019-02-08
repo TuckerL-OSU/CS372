@@ -99,7 +99,8 @@ public class chatserve {
                     System.out.print(clientName + "> " + msg + "\n");
 //            System.out.print(clientName + "> i typed this" + "\n");
                     System.out.print(serverName + "> ");
-                    return true;
+//                    return true;
+                    break;
 //                while (true) {
 //                    if (client.input.read(temp) != -1) {
 //                        break;
@@ -108,7 +109,7 @@ public class chatserve {
                 }
 //                break;
             }
-//            return true;
+            return true;
 
 //            input.equals(temp.array().toString());
 //            input = temp.array().toString();
