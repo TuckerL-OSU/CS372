@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
             clientName[9] = '\n';
         }
         else if (strlen(clientName) < 10) {
-            clientName[strlen(clientName) - 1] = '\n';
+            clientName[strlen(clientName)] = '\n';
         }
         else {
             printf("There was a problem with the username.\n");
