@@ -124,6 +124,8 @@ void saveState(int sockfd, char *clientName, char *serverName) {
 	printf("we got back: %s\n", serverName);
 }
 
+
+
 int main(int argc, char *argv[]) {
 	char clientName[10];
 	char serverName[10];
@@ -136,6 +138,16 @@ int main(int argc, char *argv[]) {
 		printf("Enter a Username (10 characters max): ");
 		// no input validation here please don't try to break it
 		scanf("%s", clientName);
+		int padding = 10 - strlen(clientName)
+		if (padding > 0) {
+			int i;
+			for (i = 0; i < padding; i++) {
+				clientName += '_';
+			}
+		}
+		else if (padding < 0) {
+			clientName = clientName.substring(0, 10);
+		}
 	}
 
 	int sockfd = connectToServer(argc, argv);
