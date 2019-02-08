@@ -197,7 +197,6 @@ public class chatserve {
 //               serverSocket.setSoTimeout(10000);
         ) {
             System.out.println(serverName + " started on port: " + port + ".\n");
-
             return serverSocket;
         } catch (IOException ie) {
             System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
@@ -209,16 +208,16 @@ public class chatserve {
     // pass servers socket
     // need a way to send server name
 //    public static Socket estConnection(ServerSocket server) {
-    public static Socket estConnection(ServerSocket serverSocket) {
+    public static Socket estConnection(ServerSocket server) {
         try (
-                Socket server = serverSocket.accept();
-                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(server.getInputStream()));
-                PrintWriter serverACK = new PrintWriter(server.getOutputStream(), true);
+                Socket client = server.accept();
+                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
         ) {
             clientName = clientSYN.readLine();
             serverACK.println(serverName);
             System.out.println(clientName + " has successfully connected.\n");
-            return server;
+            return client;
         } catch (IOException ie) {
             System.out.println(serverName + " failed to connect to client.\n");
             System.exit(1);
@@ -318,7 +317,6 @@ public class chatserve {
         server = initServer(port);
 
         while (true) {
-
             System.out.println("Waiting for a connection...");
 //            client = initServer(port);
             client = estConnection(server);
