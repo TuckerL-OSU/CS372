@@ -207,7 +207,7 @@ public class chatserve {
 
     // pass servers socket
     // need a way to send server name
-    public static Socket estConnection(ServerSocket server) {
+//    public static Socket estConnection(ServerSocket server) {
     public static Socket estConnection(Socket client) {
         try (
                 PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
