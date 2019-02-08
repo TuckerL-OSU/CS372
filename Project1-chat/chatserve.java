@@ -61,15 +61,15 @@ public class chatserve {
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
         try {  //Read user input from terminal.
             serverName = consoleInput.readLine();
-            if (serverName.length() < 10) {
-                int padding = 10 - serverName.length();
-                for (int i = 0; i < padding; i++) {
-                    serverName += "_";
-                }
-            } else {
-                serverName = serverName.substring(0, 10);
-                System.out.println("Name truncated to: " + serverName);
-            }
+//            if (serverName.length() < 10) {
+//                int padding = 10 - serverName.length();
+//                for (int i = 0; i < padding; i++) {
+//                    serverName += "_";
+//                }
+//            } else {
+//                serverName = serverName.substring(0, 10);
+//                System.out.println("Name truncated to: " + serverName);
+//            }
         } catch (Exception e) {  //Invalid serverName.
             System.err.println("Invalid serverName.");
             System.exit(1);
