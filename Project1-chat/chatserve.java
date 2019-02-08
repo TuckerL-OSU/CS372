@@ -85,7 +85,7 @@ public class chatserve {
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-            while ((temp = client.input.readLine()) != null) {
+            while (!(temp = client.input.readLine()).equals('\n')) {
                 sb.append(temp);
             }
 
