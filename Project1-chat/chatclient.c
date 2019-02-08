@@ -121,7 +121,7 @@ int chat(int sockfd, char *clientName, char *serverName) {
 void saveState(int sockfd, char *clientName, char *serverName) {
 	int client = send(sockfd, clientName, strlen(clientName) + 1, 0);
 	int server = recv(sockfd, serverName, 10, 0);
-	printf("we got back: %s", serverName);
+	printf("we got back: %s\n", serverName);
 }
 
 int main(int argc, char *argv[]) {
