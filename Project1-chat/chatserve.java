@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+import java.nio.Buffer;
 
 public class chatserve {
     public static String serverName = null; //The Server's screen name
@@ -75,15 +76,16 @@ public class chatserve {
         }
     }
 
-    public static boolean processInput(ConnInfo client) {
+//    public static boolean processInput(ConnInfo client) {
+    public static boolean processInput(BufferedReader client) {
         String input;
-        System.out.println("input: " + client.input);
+        System.out.println("input: " + client);
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            input = client.input.readLine();
+            input = client.readLine();
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected");
-            System.out.println("input = " + client.input);
+            System.out.println("input = " + client);
             return false;
         }
         if (input == null || input.length() < 15) {
@@ -120,7 +122,7 @@ public class chatserve {
         System.out.print("before while\n");
         while (true) {
             System.out.println("input: " + client.input);
-            if (!processInput(client)) {
+            if (!processInput(client.input)) {
                 System.out.print("processInput\n");
                 termConnection(client.conn);
                 break;
