@@ -190,12 +190,13 @@ public class chatserve {
     public static String serverName = ""; //The Server's screen name
     public static String clientName = ""; //The client's screen name
 
-    public static ServerSocket initServer(int port) {
+    public static Socket initServer(int port) {
         try (  //try-with-resources: set up socket, wait for client, set up streams.
                ServerSocket serverSocket = new ServerSocket(port);
+               Socket client = serverSocket.accept();
         ) {
             System.out.println(serverName + " started on port: " + port + ".\n");
-            return serverSocket;
+            return client;
         } catch (IOException ie) {
             System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
             System.exit(1);  //close program on error.
@@ -205,9 +206,9 @@ public class chatserve {
 
     // pass servers socket
     // need a way to send server name
-    public static Socket estConnection(ServerSocket server) {
+//    public static Socket estConnection(ServerSocket server) {
+    public static Socket estConnection(Socket client) {
         try (
-                Socket client = server.accept();
                 PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
                 BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
         ) {
@@ -272,7 +273,7 @@ public class chatserve {
         }
     }
 
-    public static void chat(ServerSocket server, Socket client) {
+    public static void chat(Socket client) {
         while (true) {
             if (!processInput(client)) {
                 termConnection(client);
@@ -299,7 +300,7 @@ public class chatserve {
 
     public static void main(String[] args) {
         // Usage statement in case of incorrect args input.
-        ServerSocket server;
+//        ServerSocket server;
         Socket client;
 
         // arguments bad
@@ -311,12 +312,12 @@ public class chatserve {
         }
 
         int port = Integer.parseInt(args[0]);
-        server = initServer(port);
+        client = initServer(port);
 
         while (true) {
             System.out.println("Waiting for a connection...");
-            client = estConnection(server);
-            chat(server, client);
+            estConnection(client);
+            chat(client);
         }
     }
 }
