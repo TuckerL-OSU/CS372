@@ -76,21 +76,20 @@ public class chatserve {
     }
 
     public static boolean processInput(ConnInfo client) {
-        String input = "";
+        String in;
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            input = client.input.readLine();
+            in = client.input.readLine();
         } catch (IOException ie) {
-            System.out.println("input: " + input);
             System.out.println("Conversation with client is disconnected");
             return false;
         }
-        if (input == null || input.length() < 15) {
+        if (in == null || in.length() < 15) {
             System.out.println(clientName + " has disconnected");
             return false;
         }
-        clientName = input.substring(0, 10);
-        String msg = input.substring(clientName.length(), input.indexOf("\0"));
+        clientName = in.substring(0, 10);
+        String msg = in.substring(clientName.length(), in.indexOf("\0"));
         System.out.print(clientName + "> " + msg + "\n");
         System.out.print(serverName + "> ");
         return true;
