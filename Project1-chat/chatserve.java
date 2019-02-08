@@ -30,12 +30,18 @@ public class chatserve {
 
     //    public static ConnInfo estConnection(ServerSocket server) {
     public static ConnInfo estConnection(int port) {
-        try (
-                ServerSocket server = new ServerSocket(port);
-                Socket client = server.accept();
-                BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                PrintWriter toClient = new PrintWriter(client.getOutputStream(), true)
-        ) {
+//        try (
+//                ServerSocket server = new ServerSocket(port);
+//                Socket client = server.accept();
+//                BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
+//                PrintWriter toClient = new PrintWriter(client.getOutputStream(), true);
+//        ) {
+        try {
+            ServerSocket server = new ServerSocket(port);
+            Socket client = server.accept();
+            BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            PrintWriter toClient = new PrintWriter(client.getOutputStream(), true);
+
             System.out.print("SYN\n");
             toClient.print(serverName);
             System.out.print("ACK\n");
