@@ -2,8 +2,8 @@ import java.net.*;
 import java.io.*;
 
 public class chatserve {
-    public static String serverName = ""; //The Server's screen name
-    public static String clientName = ""; //The client's screen name
+    public static String serverName = null; //The Server's screen name
+    public static String clientName = null; //The client's screen name
 
 //    public static ServerSocket initServer(int port) {
 ////      public static Socket initServer(int port) {
