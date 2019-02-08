@@ -83,12 +83,19 @@ public class chatserve {
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-            CharBuffer temp = CharBuffer.allocate((500));
+//            CharBuffer temp = CharBuffer.allocate((500));
             if (client.input.ready()) {
-//                input = client.input.readLine();
-                client.input.read(temp);
+                input = client.input.readLine();
+//                while (true) {
+//                    if (client.input.read(temp) != -1) {
+//                        break;
+//                    }
+//                    else {
+//
+//                    }
+//                }
             }
-            input.equals(temp.array());
+//            input.equals(temp.array());
 
             clientName = input.substring(0, 10);
             String msg = input.substring(clientName.length(), input.indexOf("\0"));
