@@ -213,7 +213,7 @@ public class chatserve {
 
     public static void initServer(int port) {
         ConnInfo client;
-        int chatOrEnd = 0;
+        int chatOrEnd = 1;
 
 //        System.out.println("Waiting for a connection...");
 //        client = estConnection(port);
@@ -221,7 +221,7 @@ public class chatserve {
         while (true) {
             System.out.println("Waiting for a connection...");
             client = estConnection(port);
-            while (true) {
+            while (chatOrEnd == 1) {
                 chatOrEnd = chat(client);
                 if (chatOrEnd == 0) {
                     break;
