@@ -33,8 +33,8 @@ public class chatserve {
                 ServerSocket server = new ServerSocket(port);
                 Socket client = server.accept();
                 BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                PrintWriter toClient = new PrintWriter(client.getOutputStream(), true);
-                ){
+                PrintWriter toClient = new PrintWriter(client.getOutputStream(), true)
+        ){
             System.out.print("SYN\n");
             toClient.print(serverName);
             System.out.print("ACK\n");
@@ -102,7 +102,7 @@ public class chatserve {
 //            input.equals(temp.array().toString());
 //            input = temp.array().toString();
 
-            clientName = input.substring(0, 10);
+            clientName = input.substring(0, client.input.readLine().length());
             String msg = input.substring(clientName.length(), input.indexOf("\0"));
             System.out.print(clientName + "> " + msg + "\n");
 //            System.out.print(clientName + "> i typed this" + "\n");
