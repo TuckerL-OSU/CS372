@@ -208,16 +208,16 @@ public class chatserve {
     // pass servers socket
     // need a way to send server name
 //    public static Socket estConnection(ServerSocket server) {
-    public static Socket estConnection(ServerSocket server) {
+    public static Socket estConnection(ServerSocket serverSocket) {
         try (
-                Socket client = server.accept();
-                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
+                Socket server = serverSocket.accept();
+                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(server.getInputStream()));
+                PrintWriter serverACK = new PrintWriter(server.getOutputStream(), true);
         ) {
             clientName = clientSYN.readLine();
             serverACK.println(serverName);
             System.out.println(clientName + " has successfully connected.\n");
-            return client;
+            return server;
         } catch (IOException ie) {
             System.out.println(serverName + " failed to connect to client.\n");
             System.exit(1);
@@ -319,8 +319,8 @@ public class chatserve {
         while (true) {
             System.out.println("Waiting for a connection...");
 //            client = initServer(port);
-            client = estConnection(server);
-            chat(client);
+            server = estConnection(server);
+            chat(server);
         }
     }
 }
