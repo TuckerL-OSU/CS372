@@ -50,7 +50,7 @@ public class chatserve {
             if (fromClient.ready()) {
                 fromClient.read(temp);
             }
-            clientName.equals(temp.array());
+            clientName.equals(temp.array().toString());
             return clientConn;
         } catch (Exception e) {
             System.out.println(serverName + " failed to connect to client.");
