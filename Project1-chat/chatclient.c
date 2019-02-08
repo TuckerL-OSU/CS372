@@ -135,15 +135,15 @@ int main(int argc, char *argv[]) {
 		printf("Enter a Username (10 characters max): ");
 		// no input validation here please don't try to break it
 		scanf("%s", clientName);
-        if (strlen(clientName) >= 10) {
-            clientName[9] = '\n';
-        }
-        else if (strlen(clientName) < 10) {
-            clientName[strlen(clientName)] = '\n';
-        }
-        else {
-            printf("There was a problem with the username.\n");
-        }
+//        if (strlen(clientName) >= 10) {
+//            clientName[9] = '\n';
+//        }
+//        else if (strlen(clientName) < 10) {
+//            clientName[strlen(clientName)] = '\n';
+//        }
+//        else {
+//            printf("There was a problem with the username.\n");
+//        }
 	}
 
 	int sockfd = connectToServer(argc, argv);

@@ -45,7 +45,7 @@ public class chatserve {
             ConnInfo clientConn = new ConnInfo();
             clientConn.conn = client;
             clientConn.input = fromClient;
-            System.out.println("input: " + clientConn.input.readLine());
+//            System.out.println("input: " + clientConn.input.readLine());
             clientConn.output = toClient;
             return clientConn;
         } catch (Exception e) {
@@ -84,11 +84,15 @@ public class chatserve {
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-            while ((temp = client.input.readLine()) != null) {
+            while (true) {
+                if ((temp = client.input.readLine()).equals('\0')) {
+                    break;
+                }
                 sb.append(temp);
             }
 
             input = temp.toString();
+            clientName = input.substring(0, 10);
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected");
             System.out.println("input = " + client.input);
@@ -98,7 +102,7 @@ public class chatserve {
             System.out.println(clientName + " has disconnected");
             return false;
         }
-        clientName = input.substring(0, 10);
+//        clientName = input.substring(0, 10);
         String msg = input.substring(clientName.length(), input.indexOf("\0"));
         System.out.print(clientName + "> " + msg + "\n");
         System.out.print(serverName + "> ");
