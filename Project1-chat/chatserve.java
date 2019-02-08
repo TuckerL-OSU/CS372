@@ -93,7 +93,12 @@ public class chatserve {
             while (true) {
                 if (client.input.ready()) {
                     input = client.input.readLine();
-                    break;
+                    clientName = input.substring(0, client.input.readLine().length());
+                    String msg = input.substring(clientName.length(), input.indexOf("\0"));
+                    System.out.print(clientName + "> " + msg + "\n");
+//            System.out.print(clientName + "> i typed this" + "\n");
+                    System.out.print(serverName + "> ");
+                    return true;
 //                while (true) {
 //                    if (client.input.read(temp) != -1) {
 //                        break;
@@ -105,12 +110,7 @@ public class chatserve {
 //            input.equals(temp.array().toString());
 //            input = temp.array().toString();
 
-//            clientName = input.substring(0, client.input.readLine().length());
-//            String msg = input.substring(clientName.length(), input.indexOf("\0"));
-//            System.out.print(clientName + "> " + msg + "\n");
-////            System.out.print(clientName + "> i typed this" + "\n");
-//            System.out.print(serverName + "> ");
-//            return true;
+
 
 //            System.out.print("input: " + client.input.readLine().length());
 
@@ -147,11 +147,11 @@ public class chatserve {
 //            System.out.println(clientName + " has disconnected");
 //            return false;
 //        }
-        clientName = input.substring(0, 10);
-        String msg = input.substring(clientName.length(), input.indexOf("\0"));
-        System.out.print(clientName + "> " + msg + "\n");
-        System.out.print(serverName + "> ");
-        return true;
+//        clientName = input.substring(0, 10);
+//        String msg = input.substring(clientName.length(), input.indexOf("\0"));
+//        System.out.print(clientName + "> " + msg + "\n");
+//        System.out.print(serverName + "> ");
+//        return true;
 //        return false;
     }
 
