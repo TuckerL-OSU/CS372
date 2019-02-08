@@ -211,7 +211,7 @@ public class chatserve {
     public static Socket estConnection(ServerSocket server) {
 //    public static Socket estConnection(Socket server) {
         try (
-                Socket client = serverSocket.accept();
+                Socket client = server.accept();
                 BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
         ) {
