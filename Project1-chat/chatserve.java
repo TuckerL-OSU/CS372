@@ -82,7 +82,7 @@ public class chatserve {
 
     public static boolean processInput(ConnInfo client) {
 //    public static boolean processInput(BufferedReader client) {
-        String input = "";
+        String input;
 //        String[] temp = null;
 //        char[] c = null;
 //        StringBuilder sb = new StringBuilder();
