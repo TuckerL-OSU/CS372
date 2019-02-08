@@ -124,8 +124,11 @@ void saveState(int sockfd, char *clientName, char *serverName) {
 }
 
 int main(int argc, char *argv[]) {
-	char clientName[10] = ' ';
-	char serverName[10] = ' ';
+	char clientName[10];
+	char serverName[10];
+
+	memset(clientName, 0, sizeof(clientName));
+    memset(serverName, 0, sizeof(serverName));
 
 	// we need 3 arguments to start the client. [command] [server] [port]
 	if (argc != 3) {
