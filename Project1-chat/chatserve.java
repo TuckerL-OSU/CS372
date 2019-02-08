@@ -193,6 +193,8 @@ public class chatserve {
     public static ServerSocket initServer(int port) {
         try (  //try-with-resources: set up socket, wait for client, set up streams.
                ServerSocket serverSocket = new ServerSocket(port);
+               // set a timeout so it will wait
+               serverSocket.setSoTimeout(10000);
         ) {
             System.out.println(serverName + " started on port: " + port + ".\n");
 
