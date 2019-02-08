@@ -51,7 +51,7 @@ public class chatserve {
                 fromClient.read(temp);
             }
 //            clientName.equals(temp.array().toString());
-            clientName.equals(temp.array().toString());
+//            clientName = temp.array().toString();
             return clientConn;
         } catch (Exception e) {
             System.out.println(serverName + " failed to connect to client.");
@@ -102,9 +102,9 @@ public class chatserve {
             input.equals(temp.array().toString());
 
             clientName = input.substring(0, 10);
-//            String msg = input.substring(clientName.length(), input.indexOf("\0"));
-//            System.out.print(clientName + "> " + msg + "\n");
-            System.out.print(clientName + "> i typed this" + "\n");
+            String msg = input.substring(clientName.length(), input.indexOf("\0"));
+            System.out.print(clientName + "> " + msg + "\n");
+//            System.out.print(clientName + "> i typed this" + "\n");
             System.out.print(serverName + "> ");
             return true;
 
