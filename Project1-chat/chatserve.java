@@ -172,7 +172,7 @@ public class chatserve {
     public static void chat(ConnInfo client) {
         System.out.print("before while\n");
         while (true) {
-            System.out.println("input: " + client.input);
+//            System.out.println("input: " + client.input);
             if (!processInput(client)) {
                 System.out.print("processInput\n");
                 System.out.println("clientName: " + clientName);
