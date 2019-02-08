@@ -88,7 +88,7 @@ public class chatserve {
 //                input = client.input.readLine();
                 client.input.read(temp);
             }
-            input.equals(temp);
+            input.equals(temp.array());
             System.out.print("input: " + client.input.readLine().length());
 
 
