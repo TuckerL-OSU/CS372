@@ -117,6 +117,7 @@ public class chatserve {
     public static void chat(ConnInfo client) {
         System.out.print("before while\n");
         while (true) {
+            System.out.println("input: " + client.input);
             if (!processInput(client)) {
                 System.out.print("processInput\n");
                 termConnection(client.conn);
