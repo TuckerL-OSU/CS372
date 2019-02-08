@@ -143,12 +143,12 @@ int main(int argc, char *argv[]) {
 		if (padding > 0) {
 			int i;
 			for (i = 0; i < padding; i++) {
-				clientName[length] += '_';
+				clientName[length + i] += '_';
 			}
 		}
-		else if (padding < 0) {
-			clientName = clientName.substring(0, 10);
-		}
+		//else if (padding < 0) {
+		//	clientName = clientName.substring(0, 10);
+		//}
 	}
 
 	int sockfd = connectToServer(argc, argv);
