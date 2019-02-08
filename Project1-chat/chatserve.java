@@ -120,7 +120,6 @@ public class chatserve {
 //            input.equals(temp.array().toString());
 //            input = temp.array().toString();
 
-
 //            System.out.print("input: " + client.input.readLine().length());
 
 //            while ((temp = client.input.readLine()) != null) {
