@@ -154,6 +154,7 @@ public class chatserve {
             System.out.println("input: " + client.input);
             if (!processInput(client)) {
                 System.out.print("processInput\n");
+                System.out.println("clientName: " + clientName);
                 termConnection(client.conn);
                 break;
             }
