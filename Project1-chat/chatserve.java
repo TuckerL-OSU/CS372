@@ -215,20 +215,20 @@ public class chatserve {
         ConnInfo client;
         int chatOrEnd = 0;
 
-        System.out.println("Waiting for a connection...");
-        client = estConnection(port);
+//        System.out.println("Waiting for a connection...");
+//        client = estConnection(port);
 
         while (true) {
-//            System.out.println("Waiting for a connection...");
-//            client = estConnection(port);
-            while (client != null) {
+            System.out.println("Waiting for a connection...");
+            client = estConnection(port);
+            while (true) {
                 chatOrEnd = chat(client);
                 if (chatOrEnd == 0) {
                     break;
                 }
             }
-            System.out.println("Waiting for a connection...");
-            client = estConnection(port);
+//            System.out.println("Waiting for a connection...");
+//            client = estConnection(port);
         }
     }
 
