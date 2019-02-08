@@ -119,7 +119,6 @@ int chat(int sockfd, char *clientName, char *serverName) {
 
 // save the state of sockfd to preserve client and server names
 void saveState(int sockfd, char *clientName, char *serverName) {
-    clientName[strlen(clientName)] = '\n';
 	int client = send(sockfd, clientName, strlen(clientName) + 1, 0);
 	int server = recv(sockfd, serverName, 10, 0);
 }
