@@ -24,13 +24,18 @@ public class chatserve {
     public static Socket estConnection(int port) {
 //    public static Socket estConnection(Socket server) {
         try {
+            System.out.println("before serverSocket\n");
             ServerSocket serverSocket = new ServerSocket(port);
             Socket client = serverSocket.accept();
+            System.out.println("after accept\n");
             BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
             PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
+            System.out.println("after read write\n");
 
             clientName = clientSYN.readLine();
+            System.out.println("SYN\n");
             serverACK.println(serverName);
+            System.out.println("ACK\n");
 
             System.out.println(clientName + " has successfully connected.\n");
             return client;
