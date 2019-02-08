@@ -46,7 +46,7 @@ public class chatserve {
             ConnInfo clientConn = new ConnInfo();
             clientConn.conn = client;
             clientConn.input = fromClient;
-            System.out.println("input: " + clientConn.input);
+            System.out.println("input: " + clientConn.input.readLine());
             clientConn.output = toClient;
             return clientConn;
         } catch (Exception e) {
@@ -76,16 +76,23 @@ public class chatserve {
         }
     }
 
-//    public static boolean processInput(ConnInfo client) {
-    public static boolean processInput(BufferedReader client) {
+    public static boolean processInput(ConnInfo client) {
+//    public static boolean processInput(BufferedReader client) {
         String input;
-        System.out.println("input: " + client);
+        String temp;
+        StringBuilder sb = new StringBuilder();
+        System.out.println("input: " + client.input);
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            input = client.readLine();
+
+            while ((temp = client.input.readLine()) != null) {
+                sb.append(temp);
+            }
+
+            input = temp.toString();
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected");
-            System.out.println("input = " + client);
+            System.out.println("input = " + client.input);
             return false;
         }
         if (input == null || input.length() < 15) {
@@ -122,7 +129,7 @@ public class chatserve {
         System.out.print("before while\n");
         while (true) {
             System.out.println("input: " + client.input);
-            if (!processInput(client.input)) {
+            if (!processInput(client)) {
                 System.out.print("processInput\n");
                 termConnection(client.conn);
                 break;
