@@ -49,8 +49,7 @@ public class chatserve {
                 for (int i = 0; i < padding; i++) {
                     serverName += "_";
                 }
-            }
-            else {
+            } else {
                 serverName = serverName.substring(0, 10);
                 System.out.println("Name truncated to: " + serverName);
             }
@@ -61,7 +60,7 @@ public class chatserve {
     }
 
     public static boolean processInput(Socket client) {
-               String input = "";
+        String input = "";
         try {  //Read from the socket.
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             input = in.readLine();
@@ -81,10 +80,9 @@ public class chatserve {
 
     public static boolean processOutput(Socket client) {
         String input = "";
-        try (
+        try {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-        ) {
             input = in.readLine();
             if (input.contains("\\quit")) {
                 System.out.println("You closed the connection with: " + clientName + ".\n");
