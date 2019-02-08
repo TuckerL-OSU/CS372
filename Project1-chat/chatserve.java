@@ -32,13 +32,16 @@ public class chatserve {
             PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
             System.out.println("after read write\n");
 
-            while((clientName = clientSYN.readLine()) == null) {
-
+            StringBuilder sb = new StringBuilder();
+            while((clientName = clientSYN.readLine()) != null) {
+                sb.append(clientName);
+//                sb.append(System.lineSeparator());
             }
+//            clientName = sb.toString();
 
 //            clientName = "cletus";
             System.out.println("SYN\n");
-            serverACK.println("TEST");
+            serverACK.print(serverName);
             System.out.println("ACK\n");
 
             System.out.println(clientName + " has successfully connected.\n");
