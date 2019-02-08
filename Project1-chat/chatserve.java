@@ -5,8 +5,9 @@ import java.nio.CharBuffer;
 public class chatserve {
     public static String serverName = null; //The Server's screen name
     public static String clientName = null; //The client's screen name
+
     private static class ConnInfo {
-//    abstract class ConnInfo {
+        //    abstract class ConnInfo {
         Socket conn;
         BufferedReader console;
         BufferedReader input;
@@ -27,14 +28,14 @@ public class chatserve {
 //        }
 //    }
 
-//    public static ConnInfo estConnection(ServerSocket server) {
+    //    public static ConnInfo estConnection(ServerSocket server) {
     public static ConnInfo estConnection(int port) {
         try (
                 ServerSocket server = new ServerSocket(port);
                 Socket client = server.accept();
                 BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter toClient = new PrintWriter(client.getOutputStream(), true)
-        ){
+        ) {
             System.out.print("SYN\n");
             toClient.print(serverName);
             System.out.print("ACK\n");
@@ -92,30 +93,26 @@ public class chatserve {
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 //            CharBuffer temp = CharBuffer.allocate((500));
-            while (true) {
-                if (client.input.ready()) {
-                    temp = client.input.readLine();
-                    input = temp;
-                    clientName = input.substring(0, 10);
+            if (client.input.ready()) {
+                temp = client.input.readLine();
+                input = temp;
+                clientName = input.substring(0, 10);
 //                    String msg = input.substring(10, input.indexOf('\0'));
 //                    System.out.print(clientName + "> " + msg + "\n");
-                    System.out.print(clientName + "> i typed this" + "\n");
-                    System.out.print(serverName + "> ");
-//                    return true;
-                    break;
+                System.out.print(clientName + "> i typed this" + "\n");
+                System.out.print(serverName + "> ");
+                return true;
 //                while (true) {
 //                    if (client.input.read(temp) != -1) {
 //                        break;
 //                    }
 //                }
-                }
-//                break;
             }
-            return true;
+//                break;
+//            return true;
 
 //            input.equals(temp.array().toString());
 //            input = temp.array().toString();
-
 
 
 //            System.out.print("input: " + client.input.readLine().length());
@@ -158,7 +155,7 @@ public class chatserve {
 //        System.out.print(clientName + "> " + msg + "\n");
 //        System.out.print(serverName + "> ");
 //        return true;
-//        return false;
+        return false;
     }
 
     public static boolean processOutput(ConnInfo client) {
@@ -183,20 +180,20 @@ public class chatserve {
     public static int chat(ConnInfo client) {
         System.out.print("before while\n");
 //            System.out.println("input: " + client.input);
-            if (!processInput(client)) {
-                System.out.print("processInput\n");
-                System.out.println("clientName: " + clientName);
-                termConnection(client.conn);
-                return 0;
-            }
+        if (!processInput(client)) {
+            System.out.print("processInput\n");
+            System.out.println("clientName: " + clientName);
+            termConnection(client.conn);
+            return 0;
+        }
 
-            if (!processOutput(client)) {
-                System.out.print("processOutput\n");
-                termConnection(client.conn);
-                return 0;
-            }
+        if (!processOutput(client)) {
+            System.out.print("processOutput\n");
+            termConnection(client.conn);
+            return 0;
+        }
 
-            return 1;
+        return 1;
     }
 
     public static void termConnection(Socket client) {
@@ -209,7 +206,7 @@ public class chatserve {
     }
 
     public static void initServer(int port) {
-        ConnInfo client ;
+        ConnInfo client;
         int chatOrEnd = 0;
 
         while (true) {
