@@ -86,6 +86,7 @@ public class chatserve {
 //        String[] temp = null;
 //        char[] c = null;
 //        StringBuilder sb = new StringBuilder();
+        System.out.println("before try");
 
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -98,16 +99,16 @@ public class chatserve {
                     System.out.print(clientName + "> " + msg + "\n");
 //            System.out.print(clientName + "> i typed this" + "\n");
                     System.out.print(serverName + "> ");
-//                    return true;
+                    return true;
 //                while (true) {
 //                    if (client.input.read(temp) != -1) {
 //                        break;
 //                    }
 //                }
                 }
-                break;
+//                break;
             }
-            return true;
+//            return true;
 
 //            input.equals(temp.array().toString());
 //            input = temp.array().toString();
