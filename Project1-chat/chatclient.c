@@ -142,7 +142,7 @@ int main(int argc, char *argv[]) {
 		if (padding > 0) {
 			int i;
 			for (i = 0; i < padding; i++) {
-				clientName += '_';
+				clientName += "_";
 			}
 		}
 		else if (padding < 0) {
