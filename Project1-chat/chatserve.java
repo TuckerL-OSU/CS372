@@ -319,7 +319,7 @@ public class chatserve {
 
             System.out.println("Waiting for a connection...");
 //            client = initServer(port);
-            client = estConnection(server)
+            client = estConnection(server);
             chat(client);
         }
     }
