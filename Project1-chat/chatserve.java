@@ -191,10 +191,6 @@ public class chatserve {
     }
 
     public static void main(String[] args) {
-        ServerSocket server;
-//        Socket server;
-
-
         if (args.length > 1) {
             System.err.println("Incorrect Arguments. Try: \"java chatserve [port]\"");
             return;  //Close program.
