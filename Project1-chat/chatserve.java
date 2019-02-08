@@ -26,11 +26,6 @@ public class chatserve {
 //        }
 //    }
 
-    // pass servers socket
-    // need a way to send server name
-
-    // bufferedreader
-
 //    public static ConnInfo estConnection(ServerSocket server) {
     public static ConnInfo estConnection(int port) {
         try (
