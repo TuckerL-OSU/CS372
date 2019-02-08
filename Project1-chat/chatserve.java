@@ -194,8 +194,10 @@ public class chatserve {
         try (  //try-with-resources: set up socket, wait for client, set up streams.
                ServerSocket serverSocket = new ServerSocket(port);
                Socket client = serverSocket.accept();
+               BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
         ) {
             System.out.println(serverName + " started on port: " + port + ".\n");
+            clientName = clientSYN.readLine();
             return client;
         } catch (IOException ie) {
             System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
@@ -210,9 +212,7 @@ public class chatserve {
     public static Socket estConnection(Socket client) {
         try (
                 PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
-                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
         ) {
-            clientName = clientSYN.readLine();
             serverACK.println(serverName);
             System.out.println(clientName + " has successfully connected.\n");
             return client;
