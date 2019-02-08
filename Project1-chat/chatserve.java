@@ -95,7 +95,7 @@ public class chatserve {
 //        char[] c = null;
 //        StringBuilder sb = new StringBuilder();
         System.out.println("before try");
-        System.out.println("input: " + client.input);
+//        System.out.println("input: " + client.input);
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 //            CharBuffer temp = CharBuffer.allocate((500));
