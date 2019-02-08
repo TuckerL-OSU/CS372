@@ -46,10 +46,10 @@ public class chatserve {
 //            System.out.println("input: " + clientConn.input.readLine());
             clientConn.output = toClient;
 
-            CharBuffer temp = CharBuffer.allocate((10));
-            if (fromClient.ready()) {
-                fromClient.read(temp);
-            }
+//            CharBuffer temp = CharBuffer.allocate((10));
+//            if (fromClient.ready()) {
+//                fromClient.read(temp);
+//            }
 //            clientName.equals(temp.array().toString());
 //            clientName = temp.array().toString();
             return clientConn;
