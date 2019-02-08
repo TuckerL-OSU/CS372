@@ -79,37 +79,46 @@ public class chatserve {
 
     public static boolean processInput(ConnInfo client) {
 //    public static boolean processInput(BufferedReader client) {
-        String input;
-//        String temp;
+        String input = null;
+        String temp;
 //        StringBuilder sb = new StringBuilder();
 
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-            System.out.print("input: " + client.input.readLine());
-            input = client.input.readLine();
+//            System.out.print("input: " + client.input.readLine());
+//            input = client.input.readLine();
 
-//            while ((temp = client.input.readLine()) != null) {
-////            while ((temp = client.input.readLine()).equals('\n')) {
-//                sb.append(temp);
-//                input = temp.toString();
-//            }
+            while ((temp = client.input.readLine()) != null) {
+//            while ((temp = client.input.readLine()).equals('\n')) {
+                if (temp.length() == 0) {
+                    return false;
+                }
+                else {
+                    clientName = input.substring(0, 10);
+                    String msg = input.substring(clientName.length(), input.indexOf("\0"));
+                    System.out.print(clientName + "> " + msg + "\n");
+                    System.out.print(serverName + "> ");
+                    return true;
+                }
+            }
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected");
 //            System.out.println("input = " + client.input.readLine());
             return false;
         }
 //        input = temp.toString();
-        clientName = input.substring(0, 10);
-        if (input == null || input.length() < 15) {
-            System.out.println(clientName + " has disconnected");
-            return false;
-        }
 //        clientName = input.substring(0, 10);
-        String msg = input.substring(clientName.length(), input.indexOf("\0"));
-        System.out.print(clientName + "> " + msg + "\n");
-        System.out.print(serverName + "> ");
-        return true;
+//        if (input == null || input.length() < 15) {
+//            System.out.println(clientName + " has disconnected");
+//            return false;
+//        }
+//        clientName = input.substring(0, 10);
+//        String msg = input.substring(clientName.length(), input.indexOf("\0"));
+//        System.out.print(clientName + "> " + msg + "\n");
+//        System.out.print(serverName + "> ");
+//        return true;
+        return false;
     }
 
     public static boolean processOutput(ConnInfo client) {
