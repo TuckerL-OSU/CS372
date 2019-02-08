@@ -99,7 +99,7 @@ public class chatserve {
                     }
                 }
             }
-            input.equals(temp.array());
+            input.equals(temp.array().toString());
 
             clientName = input.substring(0, 10);
 //            String msg = input.substring(clientName.length(), input.indexOf("\0"));
@@ -201,12 +201,13 @@ public class chatserve {
     public static void initServer(int port) {
         ConnInfo client ;
 
+        client = estConnection(port);
         while (true) {
             System.out.println("Waiting for a connection...");
-            client = estConnection(port);
             while (client != null) {
                 chat(client);
             }
+            client = estConnection(port);
             break;
         }
     }
