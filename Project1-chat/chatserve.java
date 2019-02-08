@@ -104,7 +104,7 @@ public class chatserve {
                 input = temp;
                 int length = input.length();
                 clientName = input.substring(0, 10).replace("_", "");
-                String msg = input.substring(10, input.length() - 1);
+                String msg = input.substring(10, length - 1);
                 System.out.print(clientName + "> " + msg + "\n");
 //                System.out.print(clientName + "> i typed this" + "\n");
                 System.out.print(serverName + "> ");
