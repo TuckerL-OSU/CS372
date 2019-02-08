@@ -170,23 +170,23 @@ public class chatserve {
         }
     }
 
-    public static void chat(ConnInfo client) {
+    public static int chat(ConnInfo client) {
         System.out.print("before while\n");
-        while (true) {
 //            System.out.println("input: " + client.input);
             if (!processInput(client)) {
                 System.out.print("processInput\n");
                 System.out.println("clientName: " + clientName);
                 termConnection(client.conn);
-                break;
+                return 0;
             }
 
             if (!processOutput(client)) {
                 System.out.print("processOutput\n");
                 termConnection(client.conn);
-                break;
+                return 0;
             }
-        }
+
+            return 1;
     }
 
     public static void termConnection(Socket client) {
@@ -200,15 +200,17 @@ public class chatserve {
 
     public static void initServer(int port) {
         ConnInfo client ;
+        int chatOrEnd = 0;
 
-        client = estConnection(port);
         while (true) {
             System.out.println("Waiting for a connection...");
-            while (client != null) {
-                chat(client);
-            }
             client = estConnection(port);
-            break;
+            while (client != null) {
+                chatOrEnd = chat(client);
+                if (chatOrEnd == 0) {
+                    break;
+                }
+            }
         }
     }
 
