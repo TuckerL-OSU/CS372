@@ -197,9 +197,10 @@ public class chatserve {
         int port = Integer.parseInt(args[0]);
 //        server = initServer(port);
         while (true) {
+            System.out.println("Waiting for a connection...");
             client = estConnection(port);
             while (true) {
-                System.out.println("Waiting for a connection...");
+
 //            client = initServer(port);
 //            client = estConnection(server);
 //            client = estConnection(port);
