@@ -89,8 +89,7 @@ public class chatserve {
                 client.input.read(temp);
             }
             input.equals(temp.array());
-            clientName = input.substring(0, 10);
-            System.out.print("input: " + client.input.readLine().length());
+//            System.out.print("input: " + client.input.readLine().length());
 
 
 //            while ((temp = client.input.readLine()) != null) {
@@ -126,7 +125,7 @@ public class chatserve {
 //            System.out.println(clientName + " has disconnected");
 //            return false;
 //        }
-//        clientName = input.substring(0, 10);
+        clientName = input.substring(0, 10);
         String msg = input.substring(clientName.length(), input.indexOf("\0"));
         System.out.print(clientName + "> " + msg + "\n");
         System.out.print(serverName + "> ");
