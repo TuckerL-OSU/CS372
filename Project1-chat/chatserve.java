@@ -79,8 +79,9 @@ public class chatserve {
 
     public static boolean processInput(ConnInfo client) {
 //    public static boolean processInput(BufferedReader client) {
-        String input;
-        String temp;
+        String input = "";
+        String[] temp = null;
+        char[] c = null;
 //        StringBuilder sb = new StringBuilder();
 
         try {  //Read from the socket.
@@ -89,38 +90,45 @@ public class chatserve {
             System.out.print("input: " + client.input.readLine().length());
 //            input = client.input.readLine();
 
-            while ((temp = client.input.readLine()) != null) {
-//            while (!(temp = client.input.readLine()).equals('\n')) {
-                if (temp.length() == 0) {
-                    return false;
-                }
-                else {
-                    input = temp;
-                    clientName = input.substring(0, 10);
-                    String msg = input.substring(clientName.length(), input.indexOf("\0"));
-                    System.out.print(clientName + "> " + msg + "\n");
-                    System.out.print(serverName + "> ");
-                    return true;
-                }
+//            while ((temp = client.input.readLine()) != null) {
+////            while (!(temp = client.input.readLine()).equals('\n')) {
+//                if (temp.length() == 0) {
+//                    return false;
+//                }
+//                else {
+//                    input = temp;
+//                    clientName = input.substring(0, 10);
+//                    String msg = input.substring(clientName.length(), input.indexOf("\0"));
+//                    System.out.print(clientName + "> " + msg + "\n");
+//                    System.out.print(serverName + "> ");
+//                    return true;
+//                }
+//            }
+            while (client.input.read(c, 0, client.input.readLine().length() - 1) != -1) {
+                int i = 0;
+                temp[i].equals(c);
+
+                i++;
             }
+
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected");
 //            System.out.print("input: " + client.input.readLine().length());
 //            System.out.println("input = " + client.input.readLine());
             return false;
         }
-//        input = temp.toString();
+        input.equals(temp);
 //        clientName = input.substring(0, 10);
 //        if (input == null || input.length() < 15) {
 //            System.out.println(clientName + " has disconnected");
 //            return false;
 //        }
-//        clientName = input.substring(0, 10);
-//        String msg = input.substring(clientName.length(), input.indexOf("\0"));
-//        System.out.print(clientName + "> " + msg + "\n");
-//        System.out.print(serverName + "> ");
-//        return true;
-        return false;
+        clientName = input.substring(0, 10);
+        String msg = input.substring(clientName.length(), input.indexOf("\0"));
+        System.out.print(clientName + "> " + msg + "\n");
+        System.out.print(serverName + "> ");
+        return true;
+//        return false;
     }
 
     public static boolean processOutput(ConnInfo client) {
