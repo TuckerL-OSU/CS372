@@ -83,6 +83,7 @@ public class chatserve {
     public static boolean processInput(ConnInfo client) {
 //    public static boolean processInput(BufferedReader client) {
         String input;
+        String temp;
 //        String[] temp = null;
 //        char[] c = null;
 //        StringBuilder sb = new StringBuilder();
@@ -93,7 +94,8 @@ public class chatserve {
 //            CharBuffer temp = CharBuffer.allocate((500));
             while (true) {
                 if (client.input.ready()) {
-                    input = client.input.readLine();
+                    temp = client.input.readLine();
+                    input = temp;
                     clientName = input.substring(0, 10);
                     String msg = input.substring(10, input.indexOf('\0'));
                     System.out.print(clientName + "> " + msg + "\n");
