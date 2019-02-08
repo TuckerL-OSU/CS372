@@ -103,8 +103,8 @@ public class chatserve {
                 temp = client.input.readLine();
                 input = temp;
                 int length = input.length();
-                clientName = input.substring(0, 10).replace("_", "");
-                String msg = input.substring(10, length - 1);
+                clientName = input.substring(0, 9).replace("_", "");
+                String msg = input.substring(9, length - 1);
                 System.out.print(clientName + "> " + msg + "\n");
 //                System.out.print(clientName + "> i typed this" + "\n");
                 System.out.print(serverName + "> ");
