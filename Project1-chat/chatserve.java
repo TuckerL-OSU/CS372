@@ -105,7 +105,6 @@ public class chatserve {
 
 //            System.out.print("input: " + client.input.readLine().length());
 
-
 //            while ((temp = client.input.readLine()) != null) {
 ////            while (!(temp = client.input.readLine()).equals('\n')) {
 //                if (temp.length() == 0) {
