@@ -38,7 +38,6 @@ public class chatserve {
                 sb.append(temp);
 //                sb.append(System.lineSeparator());
             }
-//            clientName = sb.toString();
             clientName = sb.toString();
 //            clientName = "cletus";
             System.out.println("SYN\n");
