@@ -109,13 +109,16 @@ public class chatserve {
     }
 
     public static void chat(Socket client) {
+        System.out.println("before while");
         while (true) {
             if (!processInput(client)) {
+                System.out.println("processInput");
                 termConnection(client);
                 break;
             }
 
             if (!processOutput(client)) {
+                System.out.println("processOutput");
                 termConnection(client);
                 break;
             }
