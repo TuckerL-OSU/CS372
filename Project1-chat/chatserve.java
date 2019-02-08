@@ -76,14 +76,14 @@ public class chatserve {
     }
 
     public static boolean processInput(ConnInfo client) {
-        String input;
+        String input = "";
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             input = client.input.readLine();
-            System.out.println("input: " + input);
         } catch (IOException ie) {
+            System.out.println("input: " + input);
             System.out.println("Conversation with client is disconnected");
-            return false;  //Return to main to end the program.
+            return false;
         }
         if (input == null || input.length() < 15) {
             System.out.println(clientName + " has disconnected");
