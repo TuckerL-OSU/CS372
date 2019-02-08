@@ -99,7 +99,8 @@ public class chatserve {
                     }
                 }
             }
-            input.equals(temp.array().toString());
+//            input.equals(temp.array().toString());
+            input = temp.array().toString();
 
             clientName = input.substring(0, 10);
             String msg = input.substring(clientName.length(), input.indexOf("\0"));
