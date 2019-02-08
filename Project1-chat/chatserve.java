@@ -23,7 +23,7 @@ public class chatserve {
     // need a way to send server name
     public static Socket estConnection(int port) {
 //    public static Socket estConnection(Socket server) {
-        try  (
+        try (
 //                System.out.println("before serverSocket\n");
                 ServerSocket serverSocket = new ServerSocket(port);
                 Socket client = serverSocket.accept();
@@ -34,7 +34,6 @@ public class chatserve {
                 ){
             StringBuilder sb = new StringBuilder();
             while((clientName = clientSYN.readLine()) != null) {
-                sb.append(clientName);
 //                sb.append(System.lineSeparator());
             }
 //            clientName = sb.toString();
