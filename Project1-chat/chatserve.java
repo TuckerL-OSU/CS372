@@ -196,7 +196,7 @@ public class chatserve {
         ) {
             System.out.println(serverName + " started on port: " + port + ".\n");
 
-            return server;
+            return serverSocket;
         } catch (IOException ie) {
             System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
             System.exit(1);  //close program on error.
