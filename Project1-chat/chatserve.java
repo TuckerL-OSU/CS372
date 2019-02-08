@@ -80,15 +80,17 @@ public class chatserve {
     public static boolean processInput(ConnInfo client) {
 //    public static boolean processInput(BufferedReader client) {
         String input = "";
-        String[] temp = null;
-        char[] c = null;
+//        String[] temp = null;
+//        char[] c = null;
 //        StringBuilder sb = new StringBuilder();
 
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
             System.out.print("input: " + client.input.readLine().length());
-//            input = client.input.readLine();
+            if (client.input.ready()) {
+                input = client.input.readLine();
+            }
 
 //            while ((temp = client.input.readLine()) != null) {
 ////            while (!(temp = client.input.readLine()).equals('\n')) {
@@ -104,12 +106,12 @@ public class chatserve {
 //                    return true;
 //                }
 //            }
-            while (client.input.read(c, 0, client.input.readLine().length() - 1) != -1) {
-                int i = 0;
-                temp[i].equals(c);
-
-                i++;
-            }
+//            while (client.input.read(c, 0, client.input.readLine().length() - 1) != -1) {
+//                int i = 0;
+//                temp[i].equals(c);
+//
+//                i++;
+//            }
 
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected");
@@ -117,7 +119,7 @@ public class chatserve {
 //            System.out.println("input = " + client.input.readLine());
             return false;
         }
-        input.equals(temp);
+//        input.equals(temp);
 //        clientName = input.substring(0, 10);
 //        if (input == null || input.length() < 15) {
 //            System.out.println(clientName + " has disconnected");
