@@ -180,12 +180,22 @@ public class chatserve {
         }
     }
 
-    // PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+    public static void initServer(int port) {
+        ConnInfo client ;
+
+        while (true) {
+            System.out.println("Waiting for a connection...");
+            client = estConnection(port);
+            while (true) {
+                chat(client);
+            }
+        }
+    }
 
     public static void main(String[] args) {
         ServerSocket server;
 //        Socket server;
-        ConnInfo client ;
+
 
         if (args.length > 1) {
             System.err.println("Incorrect Arguments. Try: \"java chatserve [port]\"");
@@ -195,18 +205,8 @@ public class chatserve {
         }
 
         int port = Integer.parseInt(args[0]);
+        initServer(port);
 //        server = initServer(port);
-        while (true) {
-            System.out.println("Waiting for a connection...");
-            client = estConnection(port);
-            while (true) {
 
-//            client = initServer(port);
-//            client = estConnection(server);
-//            client = estConnection(port);
-                chat(client);
-                break;
-            }
-        }
     }
 }
