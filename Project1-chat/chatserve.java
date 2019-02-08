@@ -211,14 +211,14 @@ public class chatserve {
     public static Socket estConnection(ServerSocket server) {
 //    public static Socket estConnection(Socket server) {
         try (
-                Socket server = serverSocket.accept();
-                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(server.getInputStream()));
-                PrintWriter serverACK = new PrintWriter(server.getOutputStream(), true);
+                Socket client = serverSocket.accept();
+                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
         ) {
             clientName = clientSYN.readLine();
             serverACK.println(serverName);
             System.out.println(clientName + " has successfully connected.\n");
-            return server;
+            return client;
         } catch (IOException ie) {
             System.out.println(serverName + " failed to connect to client.\n");
             System.exit(1);
