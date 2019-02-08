@@ -98,14 +98,16 @@ public class chatserve {
                     System.out.print(clientName + "> " + msg + "\n");
 //            System.out.print(clientName + "> i typed this" + "\n");
                     System.out.print(serverName + "> ");
-                    return true;
+//                    return true;
 //                while (true) {
 //                    if (client.input.read(temp) != -1) {
 //                        break;
 //                    }
 //                }
                 }
+                break;
             }
+            return true;
 
 //            input.equals(temp.array().toString());
 //            input = temp.array().toString();
