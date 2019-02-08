@@ -143,7 +143,7 @@
 import java.net.*;
 import java.io.*;
 
-public class Chatserve {
+public class chatserve {
     public static String handle = ""; //The Server's screen name
     public static String clientHandle = ""; //The client's screen name
 
