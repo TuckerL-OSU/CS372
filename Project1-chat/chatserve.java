@@ -195,9 +195,11 @@ public class chatserve {
                ServerSocket serverSocket = new ServerSocket(port);
                Socket client = serverSocket.accept();
                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
+               PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
         ) {
             System.out.println(serverName + " started on port: " + port + ".\n");
             clientName = clientSYN.readLine();
+            serverACK.println(serverName);
             return client;
         } catch (IOException ie) {
             System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
@@ -209,19 +211,18 @@ public class chatserve {
     // pass servers socket
     // need a way to send server name
 //    public static Socket estConnection(ServerSocket server) {
-    public static Socket estConnection(Socket client) {
-        try (
-                PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
-        ) {
-            serverACK.println(serverName);
-            System.out.println(clientName + " has successfully connected.\n");
-            return client;
-        } catch (IOException ie) {
-            System.out.println(serverName + " failed to connect to client.\n");
-            System.exit(1);
-            return null;
-        }
-    }
+//    public static Socket estConnection(Socket client) {
+//        try (
+//
+//        ) {
+//            System.out.println(clientName + " has successfully connected.\n");
+//            return client;
+//        } catch (IOException ie) {
+//            System.out.println(serverName + " failed to connect to client.\n");
+//            System.exit(1);
+//            return null;
+//        }
+//    }
 
     public static void getName() {
         System.out.print("Enter a name for this Server (10 characters max): ");
@@ -316,7 +317,7 @@ public class chatserve {
 
         while (true) {
             System.out.println("Waiting for a connection...");
-            estConnection(client);
+//            estConnection(client);
             chat(client);
         }
     }
