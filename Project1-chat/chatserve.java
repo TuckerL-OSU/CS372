@@ -6,6 +6,7 @@ public class chatserve {
     public static String clientName = null; //The client's screen name
     private static class ConnInfo {
         Socket conn;
+        BufferedReader console;
         BufferedReader input;
         PrintWriter output;
     }
@@ -60,15 +61,15 @@ public class chatserve {
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
         try {  //Read user input from terminal.
             serverName = consoleInput.readLine();
-//            if (serverName.length() < 10) {  //Handle is too long: truncate.
-//                int padding = 10 - serverName.length();
-//                for (int i = 0; i < padding; i++) {
-//                    serverName += "_";
-//                }
-//            } else {
-//                serverName = serverName.substring(0, 10);
-//                System.out.println("Name truncated to: " + serverName);
-//            }
+            if (serverName.length() < 10) {
+                int padding = 10 - serverName.length();
+                for (int i = 0; i < padding; i++) {
+                    serverName += "_";
+                }
+            } else {
+                serverName = serverName.substring(0, 10);
+                System.out.println("Name truncated to: " + serverName);
+            }
         } catch (Exception e) {  //Invalid serverName.
             System.err.println("Invalid serverName.");
             System.exit(1);
@@ -84,10 +85,7 @@ public class chatserve {
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-            while (true) {
-                if ((temp = client.input.readLine()).equals('\0')) {
-                    break;
-                }
+            while ((temp = client.input.readLine()) != null) {
                 sb.append(temp);
             }
 
@@ -158,16 +156,10 @@ public class chatserve {
     // PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 
     public static void main(String[] args) {
-//        for (String arg : args) {
-//            System.out.println(arg);
-//        }
-        // Usage statement in case of incorrect args input.
         ServerSocket server;
 //        Socket server;
         ConnInfo client ;
 
-        // arguments bad
-        // > 1
         if (args.length > 1) {
             System.err.println("Incorrect Arguments. Try: \"java chatserve [port]\"");
             return;  //Close program.
