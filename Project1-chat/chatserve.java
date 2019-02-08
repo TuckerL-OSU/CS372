@@ -190,10 +190,9 @@ public class chatserve {
     public static String serverName = ""; //The Server's screen name
     public static String clientName = ""; //The client's screen name
 
-    public static Socket initServer(int port) {
+    public static ServerSocket initServer(int port) {
         try (  //try-with-resources: set up socket, wait for client, set up streams.
                ServerSocket serverSocket = new ServerSocket(port);
-               Socket server = serverSocket.accept();
         ) {
             System.out.println(serverName + " started on port: " + port + ".\n");
 
@@ -208,8 +207,9 @@ public class chatserve {
     // pass servers socket
     // need a way to send server name
 //    public static Socket estConnection(ServerSocket server) {
-    public static Socket estConnection(Socket server) {
+    public static Socket estConnection(ServerSocket serverSocket) {
         try (
+                Socket server = serverSocket.accept();
                 BufferedReader clientSYN = new BufferedReader(new InputStreamReader(server.getInputStream()));
                 PrintWriter serverACK = new PrintWriter(server.getOutputStream(), true);
         ) {
@@ -301,7 +301,7 @@ public class chatserve {
 
     public static void main(String[] args) {
         // Usage statement in case of incorrect args input.
-        Socket server;
+        ServerSocket server;
         Socket client;
 
         // arguments bad
