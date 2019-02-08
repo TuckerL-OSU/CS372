@@ -1,53 +1,53 @@
 import java.net.*;
 import java.io.*;
+import java.nio.Buffer;
 
 public class chatserve {
     public static String serverName = null; //The Server's screen name
     public static String clientName = null; //The client's screen name
+    private static class ConnInfo {
+        Socket conn;
+        BufferedReader input;
+        PrintWriter output;
+    }
 
-//    public static ServerSocket initServer(int port) {
-////      public static Socket initServer(int port) {
-//        try (  //try-with-resources: set up socket, wait for client, set up streams.
-//
-//        ) {
-//            System.out.println(serverName + " started on port: " + port + ".\n");
-//            return serverSocket;
-//        } catch (IOException ie) {
-//            System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
-//            System.exit(1);  //close program on error.
-//            return null;
-//        }
-//    }
+    public static ServerSocket initServer(int port) {
+//      public static Socket initServer(int port) {
+        try (  //try-with-resources: set up socket, wait for client, set up streams.
+               ServerSocket serverSocket = new ServerSocket(port);
+        ) {
+            System.out.println(serverName + " started on port: " + port + ".");
+            return serverSocket;
+        } catch (IOException ie) {
+            System.out.println("Failed to start " + serverName + " on port: " + port + ".");
+            System.exit(1);  //close program on error.
+            return null;
+        }
+    }
 
     // pass servers socket
     // need a way to send server name
-    public static Socket estConnection(int port) {
-//    public static Socket estConnection(Socket server) {
-        try (
-//                System.out.println("before serverSocket\n");
-                ServerSocket serverSocket = new ServerSocket(port);
-                Socket client = serverSocket.accept();
-//                System.out.println("after accept\n");
-                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
-//                System.out.println("after read write\n");
-                ){
-//            String temp = null;
-//            StringBuilder sb = new StringBuilder();
-//            while((temp = clientSYN.readLine()) != null) {
-//                sb.append(temp);
-////                sb.append(System.lineSeparator());
-//            }
-//            clientName = sb.toString();
-//            clientName = "cletus";
-            System.out.println("SYN\n");
-            serverACK.print(serverName);
-            System.out.println("ACK\n");
 
-            System.out.println(clientName + " has successfully connected.\n");
-            return client;
+    // bufferedreader
+
+    public static ConnInfo estConnection(ServerSocket server) {
+//    public static Socket estConnection(ServerSocket server) {
+        try (
+                Socket client = server.accept();
+                BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                PrintWriter toClient = new PrintWriter(client.getOutputStream(), true);
+                ){
+            System.out.print("SYN\n");
+            toClient.print(serverName);
+            System.out.print("ACK\n");
+//            System.out.println(clientName + " has successfully connected.\n");
+            ConnInfo clientConn = new ConnInfo();
+            clientConn.conn = client;
+            clientConn.input = fromClient;
+            clientConn.output = toClient;
+            return clientConn;
         } catch (IOException ie) {
-            System.out.println(serverName + " failed to connect to client.\n");
+            System.out.println(serverName + " failed to connect to client.");
             System.exit(1);
             return null;
         }
@@ -68,61 +68,61 @@ public class chatserve {
 //                System.out.println("Name truncated to: " + serverName);
 //            }
         } catch (Exception e) {  //Invalid serverName.
-            System.err.println("Invalid serverName.\n");
+            System.err.println("Invalid serverName.");
             System.exit(1);
         }
     }
 
-    public static boolean processInput(Socket client) {
-        String input = "";
+    public static boolean processInput(ConnInfo client) {
+        String input;
         try {  //Read from the socket.
-            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            input = in.readLine();
+//            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            input = client.input.readLine();
         } catch (IOException ie) {
-            System.out.println("Conversation with client is disconnected\n");
+            System.out.println("Conversation with client is disconnected");
             return false;  //Return to main to end the program.
         }
         if (input == null) {
-            System.out.println(clientName + " has disconnected\n");
+            System.out.println(clientName + " has disconnected");
             return false;
         }
         String msg = input.substring(clientName.length(), input.indexOf("\0"));
-        System.out.println(clientName + "> " + msg);
+        System.out.print(clientName + "> " + msg + "\n");
         System.out.print(serverName + "> ");
         return true;
     }
 
-    public static boolean processOutput(Socket client) {
-        String input = "";
+    public static boolean processOutput(ConnInfo client) {
+        String input;
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-            input = in.readLine();
+//            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+//            PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+            input = client.input.readLine();
             if (input.contains("\\quit")) {
-                System.out.println("You closed the connection with: " + clientName + ".\n");
+                System.out.println("Connection with " + clientName + " closed.");
                 return false;
             } else {
-                out.println(serverName + input);
+                client.output.print(serverName + input);
                 return true;
             }
         } catch (Exception e) {
-            System.err.println("Invalid input\n");
+            System.err.println("Invalid input");
             return false;
         }
     }
 
-    public static void chat(Socket client) {
-        System.out.println("before while");
+    public static void chat(ConnInfo client) {
+        System.out.print("before while");
         while (true) {
             if (!processInput(client)) {
-                System.out.println("processInput");
-                termConnection(client);
+                System.out.print("processInput");
+                termConnection(client.conn);
                 break;
             }
 
             if (!processOutput(client)) {
-                System.out.println("processOutput");
-                termConnection(client);
+                System.out.print("processOutput");
+                termConnection(client.conn);
                 break;
             }
         }
@@ -132,7 +132,7 @@ public class chatserve {
         try {
             client.close();
         } catch (Exception e) {
-            System.out.println("Error closing connection with " + clientName + ".\n");
+            System.out.println("Error closing connection with " + clientName + ".");
             System.exit(1);
         }
     }
@@ -144,26 +144,26 @@ public class chatserve {
 //            System.out.println(arg);
 //        }
         // Usage statement in case of incorrect args input.
-//        ServerSocket server;
+        ServerSocket server;
 //        Socket server;
-        Socket client;
+        ConnInfo client ;
 
         // arguments bad
         // > 1
         if (args.length > 1) {
-            System.err.println("Incorrect Arguments. Try: \"java chatserve [port]\"\n");
+            System.err.println("Incorrect Arguments. Try: \"java chatserve [port]\"");
             return;  //Close program.
         } else {
             getName();
         }
 
         int port = Integer.parseInt(args[0]);
-//        server = initServer(port);
+        server = initServer(port);
 
         while (true) {
             System.out.println("Waiting for a connection...");
 //            client = initServer(port);
-            client = estConnection(port);
+            client = estConnection(server);
             chat(client);
         }
     }
