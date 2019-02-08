@@ -313,11 +313,12 @@ public class chatserve {
         }
 
         int port = Integer.parseInt(args[0]);
-        client = initServer(port);
+//        client = initServer(port);
 
         while (true) {
             System.out.println("Waiting for a connection...");
 //            estConnection(client);
+            client = initServer(port);
             chat(client);
         }
     }
