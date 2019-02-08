@@ -88,14 +88,13 @@ public class chatserve {
             while (!(temp = client.input.readLine()).equals('\n')) {
                 sb.append(temp);
             }
-
-            input = temp.toString();
-            clientName = input.substring(0, 10);
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected");
             System.out.println("input = " + client.input);
             return false;
         }
+        input = temp.toString();
+        clientName = input.substring(0, 10);
         if (input == null || input.length() < 15) {
             System.out.println(clientName + " has disconnected");
             return false;
