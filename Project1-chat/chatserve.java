@@ -125,20 +125,24 @@ public class chatserve {
     // PrintWriter out = new PrintWriter(client.getOutputStream(), true);
 
     public static void main(String[] args) {
+        for (String arg : args) {
+            System.out.println(arg);
+        }
         // Usage statement in case of incorrect args input.
         ServerSocket server;
 //        Socket server;
         Socket client;
 
         // arguments bad
-        if (args.length != 1) {
+        // > 1
+        if (args.length < 2) {
             System.err.println("Incorrect Arguments. Try: \"java chatserve [port]\"\n");
             return;  //Close program.
         } else {
             getName();
         }
 
-        int port = Integer.parseInt(args[0]);
+        int port = Integer.parseInt(args[1]);
         server = initServer(port);
 
         while (true) {
