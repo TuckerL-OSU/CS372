@@ -219,10 +219,10 @@ public class chatserve {
 //        client = estConnection(port);
 
         while (true) {
+            int chatOrEnd = 1;
             System.out.println("Waiting for a connection...");
             client = estConnection(port);
-            int chatOrEnd = 1;
-            while (chatOrEnd == 1) {
+            while (chatOrEnd != 0) {
                 chatOrEnd = chat(client);
                 if (chatOrEnd == 0) {
                     break;
