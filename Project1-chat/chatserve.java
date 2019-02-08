@@ -203,7 +203,7 @@ public class chatserve {
         while (true) {
             System.out.println("Waiting for a connection...");
             client = estConnection(port);
-            if (client != null ) {
+            while (client != null) {
                 chat(client);
             }
         }
