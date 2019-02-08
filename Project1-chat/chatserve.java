@@ -316,9 +316,9 @@ public class chatserve {
 //        client = initServer(port);
 
         while (true) {
-            System.out.println("Waiting for a connection...");
 //            estConnection(client);
             client = initServer(port);
+            System.out.println("Waiting for a connection...");
             chat(client);
         }
     }
