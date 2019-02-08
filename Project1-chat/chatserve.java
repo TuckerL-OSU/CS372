@@ -102,10 +102,10 @@ public class chatserve {
             if (client.input.ready()) {
                 temp = client.input.readLine();
                 input = temp;
-                clientName = input.substring(0, 10);
-//                    String msg = input.substring(10, input.indexOf('\0'));
-//                    System.out.print(clientName + "> " + msg + "\n");
-                System.out.print(clientName + "> i typed this" + "\n");
+                clientName = input.substring(0, temp.length());
+                String msg = input.substring(clientName.length(), input.indexOf('\0'));
+                System.out.print(clientName + "> " + msg + "\n");
+//                System.out.print(clientName + "> i typed this" + "\n");
                 System.out.print(serverName + "> ");
                 return true;
 //                while (true) {
