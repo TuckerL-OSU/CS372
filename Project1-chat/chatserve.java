@@ -47,7 +47,7 @@ public class chatserve {
             if (serverName.length() < 10) {  //Handle is too long: truncate.
                 int padding = 10 - serverName.length();
                 for (int i = 0; i < padding; i++) {
-                    serverName += '_'
+                    serverName += '_';
                 }
             }
             else {
