@@ -97,9 +97,9 @@ public class chatserve {
                     temp = client.input.readLine();
                     input = temp;
                     clientName = input.substring(0, 10);
-                    String msg = input.substring(10, input.indexOf('\0'));
-                    System.out.print(clientName + "> " + msg + "\n");
-//            System.out.print(clientName + "> i typed this" + "\n");
+//                    String msg = input.substring(10, input.indexOf('\0'));
+//                    System.out.print(clientName + "> " + msg + "\n");
+                    System.out.print(clientName + "> i typed this" + "\n");
                     System.out.print(serverName + "> ");
 //                    return true;
                     break;
