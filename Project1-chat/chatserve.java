@@ -46,7 +46,15 @@ public class chatserve {
             ConnInfo clientConn = new ConnInfo();
             clientConn.conn = client;
             clientConn.input = fromClient;
-            System.out.println("input: " + clientConn.input.readLine());
+            String temp;
+            StringBuilder sb = new StringBuilder();
+            while ((temp = clientConn.input.readLine()) != null) {
+                sb.append(temp);
+            }
+
+//            input = temp.toString();
+            System.out.println("input: " + temp.toString());
+//            System.out.println("input: " + clientConn.input.readLine());
             clientConn.output = toClient;
             return clientConn;
         } catch (Exception e) {
