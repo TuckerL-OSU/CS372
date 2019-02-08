@@ -45,6 +45,12 @@ public class chatserve {
             clientConn.input = fromClient;
 //            System.out.println("input: " + clientConn.input.readLine());
             clientConn.output = toClient;
+
+            CharBuffer temp = CharBuffer.allocate((10));
+            if (fromClient.ready()) {
+                fromClient.read(temp);
+            }
+            clientName = temp.array().toString();
             return clientConn;
         } catch (Exception e) {
             System.out.println(serverName + " failed to connect to client.");
