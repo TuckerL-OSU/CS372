@@ -89,7 +89,7 @@ public class chatserve {
             System.out.print("input: " + client.input.readLine().length());
 //            input = client.input.readLine();
 
-            while ((temp = client.input.readLine()) != null) {
+            while ((temp = client.input.readLine()) == null) {
 //            while ((temp = client.input.readLine()).equals('\n')) {
                 if (temp.length() == 0) {
                     return false;
@@ -104,6 +104,7 @@ public class chatserve {
             }
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected");
+//            System.out.print("input: " + client.input.readLine().length());
 //            System.out.println("input = " + client.input.readLine());
             return false;
         }
