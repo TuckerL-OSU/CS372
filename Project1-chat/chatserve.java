@@ -32,11 +32,11 @@ public class chatserve {
 
     public static ConnInfo estConnection(ServerSocket server) {
 //    public static Socket estConnection(ServerSocket server) {
-        try {
-            Socket client = server.accept();
-            BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            PrintWriter toClient = new PrintWriter(client.getOutputStream(), true);
-
+        try (
+                Socket client = server.accept();
+                BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                PrintWriter toClient = new PrintWriter(client.getOutputStream(), true);
+                ){
             System.out.print("SYN\n");
             toClient.print(serverName);
             System.out.print("ACK\n");
