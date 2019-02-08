@@ -1,6 +1,5 @@
 import java.net.*;
 import java.io.*;
-import java.nio.Buffer;
 
 public class chatserve {
     public static String serverName = null; //The Server's screen name
@@ -84,6 +83,7 @@ public class chatserve {
             input = client.input.readLine();
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected");
+            System.out.println("input = " + client.input);
             return false;
         }
         if (input == null || input.length() < 15) {
