@@ -135,7 +135,7 @@ public class chatserve {
 
         // arguments bad
         // > 1
-        if (args.length < 2) {
+        if (args.length > 1) {
             System.err.println("Incorrect Arguments. Try: \"java chatserve [port]\"\n");
             return;  //Close program.
         } else {
