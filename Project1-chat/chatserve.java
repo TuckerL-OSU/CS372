@@ -1,6 +1,5 @@
 import java.net.*;
 import java.io.*;
-import java.nio.Buffer;
 
 public class chatserve {
     public static String serverName = null; //The Server's screen name
