@@ -319,8 +319,8 @@ public class chatserve {
         while (true) {
             System.out.println("Waiting for a connection...");
 //            client = initServer(port);
-            server = estConnection(server);
-            chat(server);
+            client = estConnection(server);
+            chat(client);
         }
     }
 }
