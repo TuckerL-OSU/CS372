@@ -23,15 +23,15 @@ public class chatserve {
     // need a way to send server name
     public static Socket estConnection(int port) {
 //    public static Socket estConnection(Socket server) {
-        try {
-            System.out.println("before serverSocket\n");
-            ServerSocket serverSocket = new ServerSocket(port);
-            Socket client = serverSocket.accept();
-            System.out.println("after accept\n");
-            BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
-            System.out.println("after read write\n");
-
+        try  (
+//                System.out.println("before serverSocket\n");
+                ServerSocket serverSocket = new ServerSocket(port);
+                Socket client = serverSocket.accept();
+//                System.out.println("after accept\n");
+                BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
+//                System.out.println("after read write\n");
+                ){
             StringBuilder sb = new StringBuilder();
             while((clientName = clientSYN.readLine()) != null) {
                 sb.append(clientName);
