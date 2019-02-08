@@ -28,8 +28,10 @@ public class chatserve {
             Socket client = serverSocket.accept();
             BufferedReader clientSYN = new BufferedReader(new InputStreamReader(client.getInputStream()));
             PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
+
             clientName = clientSYN.readLine();
             serverACK.println(serverName);
+
             System.out.println(clientName + " has successfully connected.\n");
             return client;
         } catch (IOException ie) {
@@ -44,15 +46,15 @@ public class chatserve {
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
         try {  //Read user input from terminal.
             serverName = consoleInput.readLine();
-            if (serverName.length() < 10) {  //Handle is too long: truncate.
-                int padding = 10 - serverName.length();
-                for (int i = 0; i < padding; i++) {
-                    serverName += "_";
-                }
-            } else {
-                serverName = serverName.substring(0, 10);
-                System.out.println("Name truncated to: " + serverName);
-            }
+//            if (serverName.length() < 10) {  //Handle is too long: truncate.
+//                int padding = 10 - serverName.length();
+//                for (int i = 0; i < padding; i++) {
+//                    serverName += "_";
+//                }
+//            } else {
+//                serverName = serverName.substring(0, 10);
+//                System.out.println("Name truncated to: " + serverName);
+//            }
         } catch (Exception e) {  //Invalid serverName.
             System.err.println("Invalid serverName.\n");
             System.exit(1);
