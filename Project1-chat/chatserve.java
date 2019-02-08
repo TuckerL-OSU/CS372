@@ -32,7 +32,7 @@ public class chatserve {
             PrintWriter serverACK = new PrintWriter(client.getOutputStream(), true);
             System.out.println("after read write\n");
 
-            clientName = clientSYN.readLine();
+//            clientName = clientSYN.readLine();
             System.out.println("SYN\n");
             serverACK.println(serverName);
             System.out.println("ACK\n");
