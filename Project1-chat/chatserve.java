@@ -218,6 +218,6 @@ public class chatserve {
         int port = Integer.parseInt(args[0]);
         initServer(port);
 //        server = initServer(port);
-
+        return;
     }
 }
