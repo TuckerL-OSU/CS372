@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+import java.nio.CharBuffer;
 
 public class chatserve {
     public static String serverName = null; //The Server's screen name
@@ -82,9 +83,12 @@ public class chatserve {
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
+            CharBuffer temp = CharBuffer.allocate((500));
             if (client.input.ready()) {
-                input = client.input.readLine();
+//                input = client.input.readLine();
+                client.input.read(temp);
             }
+            input.equals(temp);
             System.out.print("input: " + client.input.readLine().length());
 
 
