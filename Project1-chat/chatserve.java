@@ -90,7 +90,7 @@ public class chatserve {
 //            input = client.input.readLine();
 
 //            while ((temp = client.input.readLine()) != null) {
-            while ((temp = client.input.readLine()).equals('\n')) {
+            while (!(temp = client.input.readLine()).equals('\n')) {
                 if (temp.length() == 0) {
                     return false;
                 }
