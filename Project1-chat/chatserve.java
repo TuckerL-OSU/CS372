@@ -194,11 +194,11 @@ public class chatserve {
 public static Socket initServer(int port) {
         try (  //try-with-resources: set up socket, wait for client, set up streams.
                ServerSocket serverSocket = new ServerSocket(port);
-               System.out.println(serverName + " started on port: " + port + ".\n");
                Socket server = serverSocket.accept();
-//               // set a timeout so it will wait
-//               serverSocket.setSoTimeout(10000);
         ) {
+            // set a timeout so it will wait
+            serverSocket.setSoTimeout(10000);
+            System.out.println(serverName + " started on port: " + port + ".\n");
             return server;
         } catch (IOException ie) {
             System.out.println("Failed to start " + serverName + " on port: " + port + ".\n");
