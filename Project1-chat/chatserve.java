@@ -87,6 +87,7 @@ public class chatserve {
 
             while (!(temp = client.input.readLine()).equals('\n')) {
                 sb.append(temp);
+                break;
             }
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected");
