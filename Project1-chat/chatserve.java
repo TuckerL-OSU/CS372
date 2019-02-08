@@ -36,7 +36,7 @@ public class chatserve {
 //
 //            }
 
-//            clientName = clientSYN.readLine();
+            clientName = "cletus";
             System.out.println("SYN\n");
             serverACK.println("TEST");
             System.out.println("ACK\n");
