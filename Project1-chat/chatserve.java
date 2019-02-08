@@ -49,7 +49,7 @@ public class chatserve {
             return clientConn;
         } catch (Exception e) {
             System.out.println(serverName + " failed to connect to client.");
-            System.exit(1);
+//            System.exit(1);
             return null;
         }
     }
