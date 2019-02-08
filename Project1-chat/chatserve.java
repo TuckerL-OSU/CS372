@@ -186,10 +186,7 @@ public class chatserve {
         while (true) {
             System.out.println("Waiting for a connection...");
             client = estConnection(port);
-            while (true) {
-                chat(client);
-                break;
-            }
+            chat(client);
         }
     }
 
