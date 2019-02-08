@@ -80,6 +80,7 @@ public class chatserve {
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             input = client.input.readLine();
+            System.out.println("input: " + input);
         } catch (IOException ie) {
             System.out.println("Conversation with client is disconnected");
             return false;  //Return to main to end the program.
