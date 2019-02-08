@@ -47,7 +47,7 @@ public class chatserve {
             clientConn.input = fromClient;
             clientConn.output = toClient;
             return clientConn;
-        } catch (IOException ie) {
+        } catch (Exception e) {
             System.out.println(serverName + " failed to connect to client.");
             System.exit(1);
             return null;
