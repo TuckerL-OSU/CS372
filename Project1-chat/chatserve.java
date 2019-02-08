@@ -188,6 +188,7 @@ public class chatserve {
             client = estConnection(port);
             while (true) {
                 chat(client);
+                break;
             }
         }
     }
