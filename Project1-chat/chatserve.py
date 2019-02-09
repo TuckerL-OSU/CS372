@@ -1,5 +1,9 @@
+import signal
 import sys
 from socket import *
+
+
+_conn_ = 0
 
 
 # get the servers name
@@ -43,12 +47,21 @@ def chat(sockfd, cli, serv):
         sockfd.send(sock_out)
 
 
+def signal_handler(sig, frame):
+    print("Force Closing Server")
+    _conn_.close()
+    sys.exit(0)
+
+
 # main
 if __name__ == "__main__":
     # command line args
     if len(sys.argv) != 2:
         print("Incorrect Arguments. Try python chatserve.py [port]")
         exit(1)
+
+    # register sigint to close
+    signal.signal(signal.SIGINT, signal_handler)
 
     server_name = get_name()
 
@@ -62,12 +75,12 @@ if __name__ == "__main__":
     while 1:
         print("{} is ready for connections on port {}".format(server_name, port))
         # return the connection and address as a tuple
-        conn, addr = server_socket.accept()
+        _conn_, addr = server_socket.accept()
         # save socket info
-        client_name = save_state(conn, server_name)
+        client_name = save_state(_conn_, server_name)
         print("{} has connected from {}".format(client_name, addr))
 
-        chat(conn, client_name, server_name)
+        chat(_conn_, client_name, server_name)
 
-        conn.close()
+        _conn_.close()
 
