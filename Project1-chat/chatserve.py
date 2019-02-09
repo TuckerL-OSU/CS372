@@ -33,7 +33,7 @@ def chat(sockfd, cli, serv):
         print("{}> {}".format(cli, sock_in))
 
         sock_out = ""
-        while 0 <= len(sock_out) < 500:
+        while len(sock_out) > 500 or len(sock_out) == 0:
             sock_out = raw_input("{}> ".format(serv))
 
         if sock_out == "\quit":
