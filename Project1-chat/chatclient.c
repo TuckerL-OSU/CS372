@@ -138,17 +138,16 @@ int main(int argc, char *argv[]) {
 		printf("Enter a Username (10 characters max): ");
 		// no input validation here please don't try to break it
 		scanf("%s", clientName);
-		int length = strlen(clientName);
-		int padding = 10 - strlen(clientName);
+		int padding = 10 - strlen(clientName)
 		if (padding > 0) {
 			int i;
 			for (i = 0; i < padding; i++) {
-				clientName[length + i] += '_';
+				clientName += '_';
 			}
 		}
-		//else if (padding < 0) {
-		//	clientName = clientName.substring(0, 10);
-		//}
+		else if (padding < 0) {
+			clientName = clientName.substring(0, 10);
+		}
 	}
 
 	int sockfd = connectToServer(argc, argv);
