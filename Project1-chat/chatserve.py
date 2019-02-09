@@ -65,7 +65,7 @@ if __name__ == "__main__":
     server_socket.bind(('', int(port)))
 
     # start listening to socket
-    server_socket.listen()
+    server_socket.listen(0)
 
     while 1:
         print(server_name + " is ready for connections on port " + port)
