@@ -1,3 +1,9 @@
+# Tucker Lavell
+# CS372 - Winter 2019
+# Project 1 - chatserve.py
+# Resources:
+#   https://stackoverflow.com/questions/1112343/how-do-i-capture-sigint-in-python
+#
 import signal
 import sys
 from socket import *
