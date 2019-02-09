@@ -9,7 +9,7 @@ def get_name():
     while len(name) > 10 or len(name) == 0:
         name = input("Enter a name for the Server (10 characters max): ")
 
-        return name
+    return name
 
 
 # save name of server and client
