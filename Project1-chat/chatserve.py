@@ -12,6 +12,7 @@ def get_name():
         return name
 
 
+# save name of server and client
 def save_state(connection, server):
     client = connection.recv(1024)
     connection.send(server)
@@ -20,14 +21,6 @@ def save_state(connection, server):
 
 # connection socket, client name, server name
 def chat(sockfd, cli, serv):
-    """Fetch a list of words from a URL.
-
-    Args:
-        url: The URL of a UTF-8 text document.
-
-    Returns:
-        A list of strings containing the words from the document.
-    """
     msg = ""
 
     while 1:
@@ -68,12 +61,12 @@ if __name__ == "__main__":
     server_socket.listen(0)
 
     while 1:
-        print(server_name + " is ready for connections on port " + port)
+        print("{} is ready for connections on port {}".format(server_name, port))
         # return the connection and address as a tuple
         conn, addr = server_socket.accept()
         # save socket info
         client_name = save_state(conn, server_name)
-        print(client_name + " has connected from {}".format(addr))
+        print("{} has connected from {}".format(client_name, addr))
 
         chat(conn, client_name, server_name)
 
