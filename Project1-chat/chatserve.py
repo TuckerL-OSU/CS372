@@ -37,7 +37,7 @@ def chat(sockfd, cli, serv):
 
         if sock_out == "\\quit":
             print("Closing Connection with " + cli)
-            break;
+            break
 
         sockfd.send(sock_out)
 
@@ -69,6 +69,4 @@ if __name__ == "__main__":
         chat(conn, client_name, server_name)
 
         conn.close()
-
-
 
