@@ -7,7 +7,7 @@ def get_name():
     name = ""
 
     while len(name) > 10 or len(name) == 0:
-        name = input("Enter a name for the Server (10 characters max): ")
+        name = raw_input("Enter a name for the Server (10 characters max): ")
 
     print("name: {}".format(name))
     return name
@@ -34,7 +34,7 @@ def chat(sockfd, cli, serv):
 
         sock_out = ""
         while 0 <= len(sock_out) < 500:
-            sock_out = input("{}> ".format(serv))
+            sock_out = raw_input("{}> ".format(serv))
 
         if sock_out == "\\quit":
             print("Closing Connection with " + cli)
