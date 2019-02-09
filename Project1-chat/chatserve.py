@@ -36,7 +36,7 @@ def chat(sockfd, cli, serv):
         while 0 <= len(sock_out) < 500:
             sock_out = raw_input("{}> ".format(serv))
 
-        if sock_out == "\\quit":
+        if sock_out == "\quit":
             print("Closing Connection with " + cli)
             break
 
