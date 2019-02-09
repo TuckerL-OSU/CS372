@@ -121,7 +121,7 @@ int chat(int sockfd, char *clientName, char *serverName) {
 void saveState(int sockfd, char *clientName, char *serverName) {
 	int client = send(sockfd, clientName, strlen(clientName), 0);
 	int server = recv(sockfd, serverName, 10, 0);
-	printf("we got back: %s\n", serverName);
+//	printf("we got back: %s\n", serverName);
 }
 
 
@@ -138,16 +138,16 @@ int main(int argc, char *argv[]) {
 		printf("Enter a Username (10 characters max): ");
 		// no input validation here please don't try to break it
 		scanf("%s", clientName);
-		int padding = 10 - strlen(clientName)
-		if (padding > 0) {
-			int i;
-			for (i = 0; i < padding; i++) {
-				clientName += '_';
-			}
-		}
-		else if (padding < 0) {
-			clientName = clientName.substring(0, 10);
-		}
+//		int padding = 10 - strlen(clientName)
+//		if (padding > 0) {
+//			int i;
+//			for (i = 0; i < padding; i++) {
+//				clientName += '_';
+//			}
+//		}
+//		else if (padding < 0) {
+//			clientName = clientName.substring(0, 10);
+//		}
 	}
 
 	int sockfd = connectToServer(argc, argv);
