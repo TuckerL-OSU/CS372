@@ -1,6 +1,7 @@
 import sys
 from socket import *
 
+
 # get the servers name
 def get_name():
     name = ""
@@ -16,8 +17,9 @@ def save_state(connection, server):
     connection.send(server)
     return client
 
+
 # connection socket, client name, server name
-def chat(sock, cli, serv):
+def chat(sockfd, cli, serv):
     """Fetch a list of words from a URL.
 
     Args:
@@ -30,7 +32,7 @@ def chat(sock, cli, serv):
 
     while 1:
         # read in opened socket
-        sock_in = sock.recv(501)[0:-1]
+        sock_in = sockfd.recv(501)[0:-1]
         if sock_in == "":
             print("Nothing received. Closing Connection")
             break
@@ -42,11 +44,11 @@ def chat(sock, cli, serv):
         while 0 <= len(sock_out) < 500:
             sock_out = input("{}> ".format(serv))
 
-        if sock_out == "\quit":
+        if sock_out == "\\quit":
             print("Closing Connection with " + cli)
             break;
 
-        sock.send(sock_out)
+        sockfd.send(sock_out)
 
 
 # main
