@@ -26,7 +26,7 @@ def chat(sockfd, cli, serv):
         # read in opened socket
         sock_in = sockfd.recv(501)[0:-1]
         if sock_in == "":
-            print("Nothing received. Closing Connection")
+            print("Connection Closed by {}".format(cli))
             break
 
         # print prompt
