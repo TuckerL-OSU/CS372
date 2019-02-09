@@ -12,6 +12,16 @@ public class chatserve {
         BufferedReader console;
         BufferedReader input;
         PrintWriter output;
+
+        @Override
+        public String toString() {
+            return "ConnInfo{" +
+                    "conn=" + conn +
+                    ", console=" + console +
+                    ", input=" + input +
+                    ", output=" + output +
+                    '}';
+        }
     }
 
 //    public static ServerSocket initServer(int port) {
@@ -30,17 +40,17 @@ public class chatserve {
 
     //    public static ConnInfo estConnection(ServerSocket server) {
     public static ConnInfo estConnection(int port) {
-//        try (
-//                ServerSocket server = new ServerSocket(port);
-//                Socket client = server.accept();
-//                BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
-//                PrintWriter toClient = new PrintWriter(client.getOutputStream(), true);
-//        ) {
-        try {
-            ServerSocket server = new ServerSocket(port);
-            Socket client = server.accept();
-            BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            PrintWriter toClient = new PrintWriter(client.getOutputStream(), true);
+        try (
+                ServerSocket server = new ServerSocket(port);
+                Socket client = server.accept();
+                BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                PrintWriter toClient = new PrintWriter(client.getOutputStream(), true);
+        ) {
+//        try {
+//            ServerSocket server = new ServerSocket(port);
+//            Socket client = server.accept();
+//            BufferedReader fromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
+//            PrintWriter toClient = new PrintWriter(client.getOutputStream(), true);
 
             System.out.print("SYN\n");
             toClient.print(serverName);
@@ -61,6 +71,7 @@ public class chatserve {
 //            clientName = temp.array().toString();
             return clientConn;
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println(serverName + " failed to connect to client.");
 //            System.exit(1);
             return null;
@@ -95,15 +106,16 @@ public class chatserve {
 //        char[] c = null;
 //        StringBuilder sb = new StringBuilder();
         System.out.println("before try");
-
+        System.out.println("input: " + client.input);
         try {  //Read from the socket.
 //            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 //            CharBuffer temp = CharBuffer.allocate((500));
             if (client.input.ready()) {
                 temp = client.input.readLine();
                 input = temp;
-                clientName = input.substring(0, 10);
-                String msg = input.substring(clientName.length(), input.indexOf('\0'));
+                int length = input.length();
+                clientName = input.substring(0, 9).replace("_", "");
+                String msg = input.substring(9, length - 1);
                 System.out.print(clientName + "> " + msg + "\n");
 //                System.out.print(clientName + "> i typed this" + "\n");
                 System.out.print(serverName + "> ");
@@ -212,17 +224,21 @@ public class chatserve {
 
     public static void initServer(int port) {
         ConnInfo client;
-        int chatOrEnd = 0;
+        int chatOrEnd = 1;
+
+//        System.out.println("Waiting for a connection...");
+//        client = estConnection(port);
 
         while (true) {
             System.out.println("Waiting for a connection...");
             client = estConnection(port);
-            while (client != null) {
-                chatOrEnd = chat(client);
-                if (chatOrEnd == 0) {
+            while (client.input != null) {
+                if (chat(client) == 0) {
                     break;
                 }
             }
+//            System.out.println("Waiting for a connection...");
+//            client = estConnection(port);
         }
     }
 
