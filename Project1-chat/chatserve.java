@@ -221,7 +221,7 @@ public class chatserve {
         while (true) {
             System.out.println("Waiting for a connection...");
             client = estConnection(port);
-            while (true) {
+            while (client.input != null) {
                 if (chat(client) == 0) {
                     break;
                 }
