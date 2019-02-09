@@ -6,7 +6,7 @@ from socket import *
 def get_name():
     name = ""
 
-    while 10 < len(name) < 1:
+    while len(name) > 10 or len(name) == 0:
         name = input("Enter a name for the Server (10 characters max): ")
 
         return name
