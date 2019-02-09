@@ -21,8 +21,6 @@ def save_state(connection, server):
 
 # connection socket, client name, server name
 def chat(sockfd, cli, serv):
-    msg = ""
-
     while 1:
         # read in opened socket
         sock_in = sockfd.recv(501)[0:-1]
