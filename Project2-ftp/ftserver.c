@@ -36,7 +36,6 @@ struct addrinfo *openConnection(char *port) {
 	hints.ai_family = AF_INET;
 	// TCP stream
 	hints.ai_socktype = SOCK_STREAM;
-	// wait for any connection
 	hints.ai_flags = AI_PASSIVE;
 
 	if ((status = getaddrinfo(NULL, port, &hints, &result)) != 0) {
@@ -157,8 +156,8 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 	struct addrinfo *connection = createConnection(addr, port);      // Call our function to create the address
 	int sockfd = createSocket(connection);                                               //Create the socket and then connect it. These are all functions we wrote from Beej's guide
 																				  // establish the connection
-	if (estConnection(sockfd, connection) != -1) {
-		// successfully created connection, return socket
+	if (estConnection(sockfd, connection) == -1) {
+		// did not establish connection, return socket
 		return sockfd;
 	}
 
@@ -177,7 +176,7 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 
 		if (bytes < 0) {
 			error(0, "Failed to read file.\n");
-			return;
+			return 0;
 		}
 		//
 		void* output = buffer;
@@ -185,7 +184,7 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 			int numBytesWritten = send(sockfd, output, sizeof(buffer), 0);
 			if (numBytesWritten < 0) {
 				error(0, "Failed to send data.\n");
-				return;
+				return 0;
 			}
 			bytes -= numBytesWritten;
 			output += numBytesWritten;
@@ -206,7 +205,7 @@ void sendDirectory(char *addr, char *port, char **files, int numOfFiles) {      
 	struct addrinfo *connection = createConnection(addr, port);      //Similar setup for connections
 	int sockfd = createSocket(connection);
 	
-	if (estConnection(sockfd, connection) != -1) {
+	if (estConnection(sockfd, connection) == -1) {
 		// successfully created connection, return socket
 		return sockfd;
 	}
