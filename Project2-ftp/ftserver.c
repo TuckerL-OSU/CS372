@@ -223,7 +223,7 @@ void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) {
 	for (i = 0; i < numOfFiles; i++) {
 		// send name of each file
 		// probably safe to assume file names wont be > 255
-		send(sockfd, directory[i], 255, 0);
+		send(sockfd, directory[i], 100, 0);
 	}
 
 	char* completed = "done";
