@@ -179,7 +179,7 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 			error(0, "Failed to read file.\n");
 			return;
 		}
-
+		//
 		void* output = buffer;
 		while (bytes > 0) {
 			int numBytesWritten = send(sockfd, output, sizeof(buffer), 0);
