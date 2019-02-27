@@ -1,8 +1,9 @@
 // Tucker Lavell
 // CS372 - Winter 2019
 // Project 2 - ftserver.c
-// Much of the code was taken from beej's code samples and suggestions.
-// I was also able to reuse some of my code from P1 and from a past class
+// Much of the socket code was taken from beej's code samples and suggestions.
+// I was also able to reuse some of my code from P1 and from a past class.
+// Noted within are extra help I needed/found.
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -26,6 +27,7 @@ void error(int exitCode, const char *msg) {
 	}
 }
 
+// prepare port for connections
 struct addrinfo *openConnection(char *port) {
 	struct addrinfo hints;
 	struct addrinfo *result;
@@ -45,6 +47,7 @@ struct addrinfo *openConnection(char *port) {
 	return result;
 }
 
+// create the address structure sockets need to connect
 struct addrinfo *createConnection(char *addr, char *port) {
 	struct addrinfo hints;
 	struct addrinfo *result;
@@ -87,27 +90,31 @@ void listenSocket(int sockfd) {
 	}
 }
 
+// establish a connection with the client
 int estConnection(int sockfd, struct addrinfo *conn) {
 	int status = 0;
 
 	if ((status = connect(sockfd, conn->ai_addr, conn->ai_addrlen)) == -1) {
-		error(3, "Failed to establish connection to Client.\n");
+		error(3, "Failed to establish connection from Client.\n");
 	}
 
 	return status;
 }
 
-int getFiles(char** files) {         //We need to get all of the files in the directory
-	DIR* fd;                                 //Structure for this function was found here: https://goo.gl/oqbjTv
+// directory navigation: https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c
+// ignore not files: https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html
+int getDirectory(char** files) {
+	DIR* fd;
 	struct dirent *dir;
 	fd = opendir(".");
 	int i = 0;
 	if (fd) {
 		while ((dir = readdir(fd)) != NULL) {     //While there are still things to read, read in the file names
-			//if (dir->d_type == DT_REG) {
+			// only get regular files (ignores . and ..)
+			if (dir->d_type == DT_REG) {
 				strcpy(files[i], dir->d_name);
 				i++;
-			//}
+			}
 		}
 		closedir(fd);
 	}
@@ -118,8 +125,10 @@ int getFiles(char** files) {         //We need to get all of the files in the di
 	return i;
 }
 
-char **initContainer_filesInDir(int size) {                         //This is used to hold directory files
+// container to store the file names
+char **initContainer_filesInDir(int size) {
 	char **filesInDir = malloc(size * sizeof(char *));
+
 	int i;
 	for (i = 0; i < size; i++) {
 		filesInDir[i] = malloc(100 * sizeof(char));
@@ -138,19 +147,28 @@ void deleteContainer_filesInDir(char **filesInDir, int size) {     //Function to
 	free(filesInDir);
 }
 
-int checkForChosenFile(char **files, int numFiles, char *filename) {     //C style bool to see if the file is there
-	int fileFound = 0;                //We assume the file is not there until our loop
+// check if the file the client wants is there
+int checkForChosenFile(char **files, int numFiles, char *filename) {
+	//int fileFound = 0;
 	int i;
 
-	for (i = 0; i < numFiles; i++) {             //Loop through all the files to check the name
+	//for (i = 0; i < numFiles; i++) {
+	//	if (strcmp(files[i], filename) == 0) {
+	//		fileFound = 1;
+	//	}
+	//}
+	for (i = 0; i < numFiles; i++) {
 		if (strcmp(files[i], filename) == 0) {
-			fileFound = 1;
+			return 1;
 		}
 	}
 
-	return fileFound;             //This will have either been set to true (1) in the loop or false if not
+	return 0;
+
+	//return fileFound;
 }
 
+// send the files contents back to the client
 int sendFile(char *addr, char *port, char *filename) {                //This is what we'll use to send the file
 	sleep(2);
 	struct addrinfo *connection = createConnection(addr, port);      // Call our function to create the address
@@ -169,7 +187,7 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 		// sanitize buffer
 		memset(buffer, 0, sizeof(buffer));
 
-		int bytes = read(file, buffer, sizeof(buffer) - 1);                        //Get structure for this portion from here: https://goo.gl/X8b7sH
+		int bytes = read(file, buffer, sizeof(buffer) - 1);
 		
 		if (bytes == 0) {
 			break;
@@ -179,7 +197,7 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 			error(0, "Failed to read file.\n");
 			return 0;
 		}
-		//
+
 		void* output = buffer;
 		while (bytes > 0) {
 			int numBytesWritten = send(sockfd, output, sizeof(buffer), 0);
@@ -197,10 +215,11 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 	strcpy(buffer, "__done__");
 	send(sockfd, buffer, sizeof(buffer), 0);
 
-	close(sockfd);          //Per project specifications. Can't leave this open
+	close(sockfd);
 	freeaddrinfo(connection);
 }
 
+// send the list of files back to the client
 void sendDirectory(char *addr, char *port, char **files, int numOfFiles) {      //Function to send directory
 	sleep(2);
 	struct addrinfo *connection = createConnection(addr, port);      //Similar setup for connections
@@ -225,7 +244,7 @@ void sendDirectory(char *addr, char *port, char **files, int numOfFiles) {      
 	freeaddrinfo(connection);
 }
 
-void acceptConnection(int new_fd) {	            //Structure for this borrowed from Beej's guide
+void talkToClient(int new_fd) {	            //Structure for this borrowed from Beej's guide
 	char * good = "ok";
 	char * bad = "bad";
 	char port[100];
@@ -257,7 +276,7 @@ void acceptConnection(int new_fd) {	            //Structure for this borrowed fr
 		printf("File: %s requested \n", filename);
 
 		char** files = initContainer_filesInDir(500);
-		int numFiles = getFiles(files);         //Use the function to check if the file is there
+		int numFiles = getDirectory(files);         //Use the function to check if the file is there
 		int findFile = checkForChosenFile(files, numFiles, filename);
 		if (findFile) {
 
@@ -289,7 +308,7 @@ void acceptConnection(int new_fd) {	            //Structure for this borrowed fr
 
 		char** files = initContainer_filesInDir(500);
 
-		int numFiles = getFiles(files);
+		int numFiles = getDirectory(files);
 
 		sendDirectory(ipAddress, port, files, numFiles);
 
@@ -316,7 +335,7 @@ void waitForConnection(int sockfd) {	                //This function to wait for
 			continue;
 		}
 
-		acceptConnection(new_fd);
+		talkToClient(new_fd);
 		close(new_fd);
 	}
 }
