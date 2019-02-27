@@ -1,3 +1,8 @@
+// Tucker Lavell
+// CS372 - Winter 2019
+// Project 2 - ftserver.c
+// Much of the code was taken from beej's code samples and suggestions.
+// I was also able to reuse some of my code from P1 and from a past class
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -10,125 +15,131 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-//This program heavily references Beej's guide and I will point out when/where 
-//There are also some reused functions from Assignment 1
+#define MAX_CONNS 5
 
-
-struct addrinfo * createAddress(char* port) {   //This function ia used to create the address information
-	int status;
-	struct addrinfo hints;
-	struct addrinfo * res;
-
-	memset(&hints, 0, sizeof hints);        //Taken right from Beej's guide, empty the struct
-	hints.ai_family = AF_INET;                  //Used to specify version
-	hints.ai_socktype = SOCK_STREAM;        //TCP stream sockets
-	hints.ai_flags = AI_PASSIVE;
-
-	if ((status = getaddrinfo(NULL, port, &hints, &res)) != 0) {       //Also from Beej's guide. Print error if status isn't 0
-		fprintf(stderr,
-			"Error. Please enter the correct port.\n",
-			gai_strerror(status));
-		exit(1);
+void error(int exitCode, const char *msg) {
+	// use stderr to print error so we can set exit codes
+	// for debugging and potential future use
+	fprintf(stderr, "%s\n", msg);
+	if (exitCode != 0) {
+		exit(exitCode);
 	}
-
-	return res;
 }
 
-struct addrinfo * createAddressIP(char* ipAddress, char* port) {      //Creating the address info. Also from Beej's guide
-	int status;
+struct addrinfo *openConnection(char *port) {
 	struct addrinfo hints;
-	struct addrinfo * res;
+	struct addrinfo *result;
+	int status = 0;
 
 	memset(&hints, 0, sizeof hints);
+	// version
 	hints.ai_family = AF_INET;
+	// TCP stream
 	hints.ai_socktype = SOCK_STREAM;
+	// wait for any connection
+	hints.ai_flags = AI_PASSIVE;
 
-	if ((status = getaddrinfo(ipAddress, port, &hints, &res)) != 0) {
-		fprintf(stderr,
-			"Error. Please enter the correct port\n",
-			gai_strerror(status));
-		exit(1);
+	if ((status = getaddrinfo(addr, port, &hints, &result)) != 0) {
+		error(2, "Error opening port.\n");
 	}
 
-	return res;
+	return result;
 }
 
+struct addrinfo *createConnection(char *addr, char *port) {
+	struct addrinfo hints;
+	struct addrinfo *result;
+	int status = 0;
 
-int createSocket(struct addrinfo * res) {               //The next step in Beej's guide after creating the address info. We want to feed that into the socket
-	int sockfd;                                                     //It's either going to return a socket descriptor to be used later or it will return -1 and exit with a error
-	if ((sockfd = socket((struct addrinfo *)(res)->ai_family, res->ai_socktype, res->ai_protocol)) == -1) {
-		fprintf(stderr, "Error. Socket was not created.\n");
-		exit(1);
+	memset(&hints, 0, sizeof hints);
+	// version
+	hints.ai_family = AF_INET;
+	// TCP stream
+	hints.ai_socktype = SOCK_STREAM;
+
+	if ((status = getaddrinfo(addr, port, &hints, &result)) != 0) {
+		error(2, "Error getting address.\n");
 	}
+
+	return result;
+}
+
+int createSocket(struct addrinfo *conn) {
+	int sockfd;
+
+	if ((sockfd = socket(conn->ai_family, conn->ai_socktype, conn->ai_protocol)) == -1) {
+		error(-1, "Failed to create socket.\n");
+	}
+
 	return sockfd;
 }
 
-
-void connectSocket(int sockfd, struct addrinfo * res) {             //What we will use for the conneciton itself. Very similar to the creation
-	int status;
-	if ((status = connect(sockfd, res->ai_addr, res->ai_addrlen)) == -1) {
-		fprintf(stderr, "Error in connection.\n");
-		exit(1);
+void bindSocket(int sockfd, struct addrinfo *conn) {
+	if (bind(sockfd, conn->ai_addr, conn->ai_addrlen) == -1) {
+		close(sockfd);
+		error(1, "Failed to bind socket.\n");
 	}
 }
 
-
-void bindSocket(int sockfd, struct addrinfo * res) {                //Now we need to bind the socket. Also from Beej's guide
-	if (bind(sockfd, res->ai_addr, res->ai_addrlen) == -1) {
+void listenSocket(int sockfd) {
+	if (listen(sockfd, MAX_CONNS) == -1) {
 		close(sockfd);
-		fprintf(stderr, "Error in binding socket\n");
-		exit(1);
+		error(1, "Error listening to socket.\n");
 	}
 }
 
-void listenSocket(int sockfd) {                     //Now that it's bound, we need to listen
-	if (listen(sockfd, 5) == -1) {
-		close(sockfd);
-		fprintf(stderr, "Error. Cannot listen.\n");
-		exit(1);
+int estConnection(int sockfd, struct addrinfo *conn) {
+	int status = 0;
+
+	if ((status = connect(sockfd, conn->ai_addr, conn->ai_addrlen)) == -1) {
+		error(3, "Failed to establish connection to Client.\n");
 	}
+
+	return status;
 }
 
 int getFiles(char** files) {         //We need to get all of the files in the directory
-	DIR* d;                                 //Structure for this function was found here: https://goo.gl/oqbjTv
-	struct dirent * dir;
-	d = opendir(".");
+	DIR* fd;                                 //Structure for this function was found here: https://goo.gl/oqbjTv
+	struct dirent *dir;
+	fd = opendir(".");
 	int i = 0;
-	if (d) {
-		while ((dir = readdir(d)) != NULL) {     //While there are still things to read, read in the file names
-			if (dir->d_type == DT_REG) {
+	if (fd) {
+		while ((dir = readdir(fd)) != NULL) {     //While there are still things to read, read in the file names
+			//if (dir->d_type == DT_REG) {
 				strcpy(files[i], dir->d_name);
 				i++;
-			}
+			//}
 		}
-		closedir(d);
+		closedir(fd);
 	}
+	else {
+		error(4, "Failed to find Directory.\n");
+	}
+
 	return i;
 }
 
-
-char ** createStringHold(int size) {                         //This is used to hold directory files
-	char ** array = malloc(size * sizeof(char *));
+char **initContainer_filesInDir(int size) {                         //This is used to hold directory files
+	char **filesInDir = malloc(size * sizeof(char *));
 	int i;
 	for (i = 0; i < size; i++) {
-		array[i] = malloc(100 * sizeof(char));
-		memset(array[i], 0, sizeof(array[i]));
+		filesInDir[i] = malloc(100 * sizeof(char));
+		memset(filesInDir[i], 0, sizeof(filesInDir[i]));
 	}
-	return array;
+
+	return filesInDir;
 }
 
-
-void deleteStringHold(char ** array, int size) {     //Function to clear the array
+void deleteContainer_filesInDir(char **filesInDir, int size) {     //Function to clear the array
 	int i;
 	for (i = 0; i < size; i++) {
-		free(array[i]);
+		free(filesInDir[i]);
 	}
-	free(array);
+
+	free(filesInDir);
 }
 
-
-
-int checkFile(char ** files, int numFiles, char * filename) {     //C style bool to see if the file is there
+int checkForChosenFile(char **files, int numFiles, char *filename) {     //C style bool to see if the file is there
 	int fileFound = 0;                //We assume the file is not there until our loop
 	int i;
 
@@ -137,69 +148,81 @@ int checkFile(char ** files, int numFiles, char * filename) {     //C style bool
 			fileFound = 1;
 		}
 	}
+
 	return fileFound;             //This will have either been set to true (1) in the loop or false if not
 }
 
-void sendFile(char* ipAddress, char * port, char * filename) {                //This is what we'll use to send the file
+int sendFile(char *addr, char *port, char *filename) {                //This is what we'll use to send the file
 	sleep(2);
-	struct addrinfo * res = createAddressIP(ipAddress, port);      // Call our function to create the address
-	int dataSocket = createSocket(res);                                               //Create the socket and then connect it. These are all functions we wrote from Beej's guide
-	connectSocket(dataSocket, res);
+	struct addrinfo *connection = createConnection(addr, port);      // Call our function to create the address
+	int sockfd = createSocket(connection);                                               //Create the socket and then connect it. These are all functions we wrote from Beej's guide
+																				  // establish the connection
+	if (estConnection(sockfd, connection) != -1) {
+		// successfully created connection, return socket
+		return sockfd;
+	}
 
 	char buffer[2000];                                                                          //Create a buffer for the file and clear it with memset	
-	memset(buffer, 0, sizeof(buffer));
 
-	int fd = open(filename, O_RDONLY);                                                      //While loop to read the file. Only need to read it
+	int file = open(filename, O_RDONLY);                                                      //While loop to read the file. Only need to read it
 	while (1) {
-		int numBytes = read(fd, buffer, sizeof(buffer) - 1);                        //Get structure for this portion from here: https://goo.gl/X8b7sH
-		if (numBytes == 0)
-			break;
+		int bytes = read(file, buffer, sizeof(buffer) - 1);                        //Get structure for this portion from here: https://goo.gl/X8b7sH
+		
+		// sanitize buffer
+		memset(buffer, 0, sizeof(buffer));
 
-		if (numBytes < 0) {
-			fprintf(stderr, "Error. Cannot read file.\n");
+		if (bytes == 0) {
+			break;
+		}
+
+		if (bytes < 0) {
+			error(0, "Failed to read file.\n");
 			return;
 		}
 
-		void* hold = buffer;
-		while (numBytes > 0) {
-			int numBytesWritten = send(dataSocket, hold, sizeof(buffer), 0);
+		void* output = buffer;
+		while (bytes > 0) {
+			int numBytesWritten = send(sockfd, output, sizeof(buffer), 0);
 			if (numBytesWritten < 0) {
-				fprintf(stderr, "Error in writing\n");
+				error(0, "Failed to send data.\n");
 				return;
 			}
-			numBytes -= numBytesWritten;
-			hold += numBytesWritten;
+			bytes -= numBytesWritten;
+			output += numBytesWritten;
 		}
-
-		memset(buffer, 0, sizeof(buffer));              //Clear this out
 	}
 
+	// sanitize buffer out here, to send done
 	memset(buffer, 0, sizeof(buffer));
 	strcpy(buffer, "__done__");
-	send(dataSocket, buffer, sizeof(buffer), 0);
+	send(sockfd, buffer, sizeof(buffer), 0);
 
-	close(dataSocket);          //Per project specifications. Can't leave this open
-	freeaddrinfo(res);
+	close(sockfd);          //Per project specifications. Can't leave this open
+	freeaddrinfo(connection);
 }
 
-void sendDirectory(char * ipAddress, char * port, char ** files, int totalNum) {      //Function to send directory
+void sendDirectory(char *addr, char *port, char **files, int numOfFiles) {      //Function to send directory
 	sleep(2);
-	struct addrinfo * res = createAddressIP(ipAddress, port);      //Similar setup for connections
-	int dataSocket = createSocket(res);
-	connectSocket(dataSocket, res);
+	struct addrinfo *connection = createConnection(ipAddress, port);      //Similar setup for connections
+	int sockfd = createSocket(res);
+	
+	if (estConnection(sockfd, connection) != -1) {
+		// successfully created connection, return socket
+		return sockfd;
+	}
 
 	int i;
 	for (i = 0; i < totalNum; i++) {
-		send(dataSocket, files[i], 100, 0);                 //Send for the total number of files
+		// ,,100,0
+		send(sockfd, files[i], sizeof(files[i]), 0);                 //Send for the total number of files
 	}
 
 	char* completed = "done";
-	send(dataSocket, completed, strlen(completed), 0);
+	send(sockfd, completed, strlen(completed), 0);
 
-	close(dataSocket);
-	freeaddrinfo(res);
+	close(sockfd);
+	freeaddrinfo(connection);
 }
-
 
 void acceptConnection(int new_fd) {	            //Structure for this borrowed from Beej's guide
 	char * good = "ok";
@@ -232,9 +255,9 @@ void acceptConnection(int new_fd) {	            //Structure for this borrowed fr
 		recv(new_fd, filename, sizeof(filename) - 1, 0);
 		printf("File: %s requested \n", filename);
 
-		char** files = createStringHold(500);
+		char** files = initContainer_filesInDir(500);
 		int numFiles = getFiles(files);         //Use the function to check if the file is there
-		int findFile = checkFile(files, numFiles, filename);
+		int findFile = checkForChosenFile(files, numFiles, filename);
 		if (findFile) {
 
 			printf("File found, sending %s to client\n", filename);
@@ -254,7 +277,7 @@ void acceptConnection(int new_fd) {	            //Structure for this borrowed fr
 			char * notFound = "File not found";
 			send(new_fd, notFound, 100, 0);
 		}
-		deleteStringHold(files, 500);
+		deleteContainer_filesInDir(files, 500);
 	}
 
 	else if (strcmp(command, "l") == 0) {                  //Directory request so get the number of files and send them
@@ -263,13 +286,13 @@ void acceptConnection(int new_fd) {	            //Structure for this borrowed fr
 		printf("File list requested \n");
 		printf("Sending file list to %s \n", ipAddress);
 
-		char** files = createStringHold(500);
+		char** files = initContainer_filesInDir(500);
 
 		int numFiles = getFiles(files);
 
 		sendDirectory(ipAddress, port, files, numFiles);
 
-		deleteStringHold(files, 500);
+		deleteContainer_filesInDir(files, 500);
 	}
 	else {
 		send(new_fd, bad, strlen(bad), 0);
@@ -305,7 +328,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	printf("Server now listening on port %s\n", argv[1]);   //Now we just call all the functions we wrote in main
-	struct addrinfo* res = createAddress(argv[1]);
+	struct addrinfo* res = openConnection(argv[1]);
 	int sockfd = createSocket(res);
 	bindSocket(sockfd, res);
 	listenSocket(sockfd);
