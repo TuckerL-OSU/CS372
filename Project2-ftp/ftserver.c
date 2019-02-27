@@ -155,11 +155,12 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 	sleep(2);
 	struct addrinfo *connection = createConnection(addr, port);      // Call our function to create the address
 	int sockfd = createSocket(connection);                                               //Create the socket and then connect it. These are all functions we wrote from Beej's guide
-																				  // establish the connection
-	if (estConnection(sockfd, connection) == -1) {
-		// did not establish connection, return socket
-		return sockfd;
-	}
+	estConnection(sockfd, connection);
+																						 // establish the connection
+	//if (estConnection(sockfd, connection) == -1) {
+	//	// did not establish connection, return socket
+	//	return sockfd;
+	//}
 
 	char buffer[2000];                                                                          //Create a buffer for the file and clear it with memset	
 
@@ -204,11 +205,12 @@ void sendDirectory(char *addr, char *port, char **files, int numOfFiles) {      
 	sleep(2);
 	struct addrinfo *connection = createConnection(addr, port);      //Similar setup for connections
 	int sockfd = createSocket(connection);
-	
-	if (estConnection(sockfd, connection) == -1) {
-		// successfully created connection, return socket
-		return sockfd;
-	}
+	estConnection(sockfd, connection);
+
+	//if (estConnection(sockfd, connection) == -1) {
+	//	// successfully created connection, return socket
+	//	return sockfd;
+	//}
 
 	int i;
 	for (i = 0; i < numOfFiles; i++) {
