@@ -1,9 +1,10 @@
 // Tucker Lavell
 // CS372 - Winter 2019
 // Project 2 - ftserver.c
+//
 // Much of the socket code was taken from beej's code samples and suggestions.
 // I was also able to reuse some of my code from P1 and from a past class.
-// Noted within are extra help I needed/found.
+// Noted within is extra help I needed/found.
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -109,7 +110,7 @@ int getDirectory(char** files) {
 	fd = opendir(".");
 	int i = 0;
 	if (fd) {
-		while ((dir = readdir(fd)) != NULL) {     //While there are still things to read, read in the file names
+		while ((dir = readdir(fd)) != NULL) {
 			// only get regular files (ignores . and ..)
 			if (dir->d_type == DT_REG) {
 				strcpy(files[i], dir->d_name);
@@ -138,7 +139,8 @@ char **initContainer_filesInDir(int size) {
 	return filesInDir;
 }
 
-void deleteContainer_filesInDir(char **filesInDir, int size) {     //Function to clear the array
+// try to clean up as much as we can
+void deleteContainer_filesInDir(char **filesInDir, int size) {
 	int i;
 	for (i = 0; i < size; i++) {
 		free(filesInDir[i]);
@@ -148,15 +150,8 @@ void deleteContainer_filesInDir(char **filesInDir, int size) {     //Function to
 }
 
 // check if the file the client wants is there
-int checkForChosenFile(char **files, int numFiles, char *filename) {
-	//int fileFound = 0;
+int checkForChosenFile(char *filename, char **files, int numFiles) {
 	int i;
-
-	//for (i = 0; i < numFiles; i++) {
-	//	if (strcmp(files[i], filename) == 0) {
-	//		fileFound = 1;
-	//	}
-	//}
 	for (i = 0; i < numFiles; i++) {
 		if (strcmp(files[i], filename) == 0) {
 			return 1;
@@ -164,25 +159,21 @@ int checkForChosenFile(char **files, int numFiles, char *filename) {
 	}
 
 	return 0;
-
-	//return fileFound;
 }
 
 // send the files contents back to the client
-int sendFile(char *addr, char *port, char *filename) {                //This is what we'll use to send the file
+int sendFile(char *addr, char *port, char *filename) {
 	sleep(2);
-	struct addrinfo *connection = createConnection(addr, port);      // Call our function to create the address
-	int sockfd = createSocket(connection);                                               //Create the socket and then connect it. These are all functions we wrote from Beej's guide
+	// set up connection
+	struct addrinfo *connection = createConnection(addr, port);
+	int sockfd = createSocket(connection);
 	estConnection(sockfd, connection);
-																						 // establish the connection
-	//if (estConnection(sockfd, connection) == -1) {
-	//	// did not establish connection, return socket
-	//	return sockfd;
-	//}
 
-	char buffer[2000];                                                                          //Create a buffer for the file and clear it with memset	
+	// create a buffer to read in to/out of
+	char buffer[2000];
 
-	int file = open(filename, O_RDONLY);                                                      //While loop to read the file. Only need to read it
+	// open file as read only
+	int file = open(filename, O_RDONLY);
 	while (1) {
 		// sanitize buffer
 		memset(buffer, 0, sizeof(buffer));
@@ -198,6 +189,7 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 			return 0;
 		}
 
+		// dummy variable to make send work, fill it with the buffer
 		void* output = buffer;
 		while (bytes > 0) {
 			int numBytesWritten = send(sockfd, output, sizeof(buffer), 0);
@@ -210,7 +202,7 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 		}
 	}
 
-	// sanitize buffer out here, to send done
+	// sanitize buffer out here, to send done flag
 	memset(buffer, 0, sizeof(buffer));
 	strcpy(buffer, "__done__");
 	send(sockfd, buffer, sizeof(buffer), 0);
@@ -220,21 +212,18 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 }
 
 // send the list of files back to the client
-void sendDirectory(char *addr, char *port, char **files, int numOfFiles) {      //Function to send directory
+void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) { 
 	sleep(2);
-	struct addrinfo *connection = createConnection(addr, port);      //Similar setup for connections
+	// setup connection
+	struct addrinfo *connection = createConnection(addr, port);
 	int sockfd = createSocket(connection);
 	estConnection(sockfd, connection);
 
-	//if (estConnection(sockfd, connection) == -1) {
-	//	// successfully created connection, return socket
-	//	return sockfd;
-	//}
-
 	int i;
 	for (i = 0; i < numOfFiles; i++) {
-		// ,,100,0
-		send(sockfd, files[i], 100, 0);                 //Send for the total number of files
+		// send name of each file
+		// probably safe to assume file names wont be > 255
+		send(sockfd, directory[i], 255, 0);
 	}
 
 	char* completed = "done";
@@ -244,7 +233,7 @@ void sendDirectory(char *addr, char *port, char **files, int numOfFiles) {      
 	freeaddrinfo(connection);
 }
 
-void talkToClient(int new_fd) {	            //Structure for this borrowed from Beej's guide
+void talkToClient(int new_fd) {
 	char * good = "ok";
 	char * bad = "bad";
 	char port[100];
@@ -277,7 +266,7 @@ void talkToClient(int new_fd) {	            //Structure for this borrowed from B
 
 		char** files = initContainer_filesInDir(500);
 		int numFiles = getDirectory(files);         //Use the function to check if the file is there
-		int findFile = checkForChosenFile(files, numFiles, filename);
+		int findFile = checkForChosenFile(filename, files, numFiles);
 		if (findFile) {
 
 			printf("File found, sending %s to client\n", filename);
@@ -322,21 +311,22 @@ void talkToClient(int new_fd) {	            //Structure for this borrowed from B
 	printf("Waiting for more connections.\n");
 }
 
-void waitForConnection(int sockfd) {	                //This function to wait for more connections is also from Beej's guide
-	struct sockaddr_storage their_addr;
-	socklen_t addr_size;
-	int new_fd;
+// handles incomming connections during idle time
+void waitForConnection(int sockfd) {
+	struct sockaddr_storage clientAddr;
+	socklen_t addrSize;
+	int newConnection;
 
 	while (1) {
-		addr_size = sizeof(their_addr);
-		new_fd = accept(sockfd, (struct addrinfo *)&their_addr, &addr_size);
-
-		if (new_fd == -1) {
+		addrSize = sizeof(clientAddr);
+		newConnection = accept(sockfd, (struct sockaddr *)&clientAddr, &addrSize);
+		
+		if (newConnection == -1) {
 			continue;
 		}
 
-		talkToClient(new_fd);
-		close(new_fd);
+		talkToClient(newConnection);
+		close(newConnection);
 	}
 }
 
