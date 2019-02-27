@@ -39,7 +39,7 @@ struct addrinfo *openConnection(char *port) {
 	// wait for any connection
 	hints.ai_flags = AI_PASSIVE;
 
-	if ((status = getaddrinfo(addr, port, &hints, &result)) != 0) {
+	if ((status = getaddrinfo(NULL, port, &hints, &result)) != 0) {
 		error(2, "Error opening port.\n");
 	}
 
@@ -203,8 +203,8 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 
 void sendDirectory(char *addr, char *port, char **files, int numOfFiles) {      //Function to send directory
 	sleep(2);
-	struct addrinfo *connection = createConnection(ipAddress, port);      //Similar setup for connections
-	int sockfd = createSocket(res);
+	struct addrinfo *connection = createConnection(addr, port);      //Similar setup for connections
+	int sockfd = createSocket(connection);
 	
 	if (estConnection(sockfd, connection) != -1) {
 		// successfully created connection, return socket
@@ -212,7 +212,7 @@ void sendDirectory(char *addr, char *port, char **files, int numOfFiles) {      
 	}
 
 	int i;
-	for (i = 0; i < totalNum; i++) {
+	for (i = 0; i < numOfFiles; i++) {
 		// ,,100,0
 		send(sockfd, files[i], sizeof(files[i]), 0);                 //Send for the total number of files
 	}
