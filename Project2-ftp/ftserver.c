@@ -166,11 +166,11 @@ int sendFile(char *addr, char *port, char *filename) {                //This is 
 
 	int file = open(filename, O_RDONLY);                                                      //While loop to read the file. Only need to read it
 	while (1) {
-		int bytes = read(file, buffer, sizeof(buffer) - 1);                        //Get structure for this portion from here: https://goo.gl/X8b7sH
-		
 		// sanitize buffer
 		memset(buffer, 0, sizeof(buffer));
 
+		int bytes = read(file, buffer, sizeof(buffer) - 1);                        //Get structure for this portion from here: https://goo.gl/X8b7sH
+		
 		if (bytes == 0) {
 			break;
 		}
@@ -215,7 +215,7 @@ void sendDirectory(char *addr, char *port, char **files, int numOfFiles) {      
 	int i;
 	for (i = 0; i < numOfFiles; i++) {
 		// ,,100,0
-		send(sockfd, files[i], sizeof(files[i]), 0);                 //Send for the total number of files
+		send(sockfd, files[i], 100, 0);                 //Send for the total number of files
 	}
 
 	char* completed = "done";
