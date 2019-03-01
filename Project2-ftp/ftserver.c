@@ -351,8 +351,6 @@ void talkToClient(int clientfd) {
 	//	send(clientfd, bad, strlen(bad), 0);
 	//}
 	
-	
-
 	if (strcmp(cmd, "g") == 0) {
 		send(clientfd, good, strlen(good), 0);
 
@@ -366,15 +364,19 @@ void talkToClient(int clientfd) {
 		int findFile = checkForChosenFile(filename, files, numFiles);
 		if (findFile) {
 
-			printf("File found, sending %s to client\n", filename);
-			char *file_found = "File found";
-			send(clientfd, file_found, strlen(file_found), 0);
+			//printf("File found, sending %s to client\n", filename);
+			//char *file_found = "File found";
+			//send(clientfd, file_found, strlen(file_found), 0);
 
+			// declare file name and clean it
 			char new_filename[100];
 			memset(new_filename, 0, sizeof(new_filename));
+			
+			// append current directory extension to beginning of file name
 			strcpy(new_filename, "./");
 			char * end = new_filename + strlen(new_filename);
 			end += sprintf(end, "%s", filename);
+			printf("new file: %s\n", new_filename);
 
 			sendFile(addr, port, new_filename);
 		}
