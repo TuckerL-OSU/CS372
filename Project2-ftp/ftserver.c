@@ -275,7 +275,7 @@ int processCmd(int clientfd, int datafd, char *cmd) {
 
 		//send(clientfd, good, strlen(good), 0);
 		printf("File list requested \n");
-		printf("Sending file list Client.\n");
+		printf("Sending file list to Client.\n");
 
 		char** files = initContainer_filesInDir(500);
 
