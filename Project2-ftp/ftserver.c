@@ -73,7 +73,7 @@ int createSocket(struct addrinfo *conn) {
 
 	printf("createSocket info: %d, %d, %d\n", conn->ai_family, conn->ai_socktype, conn->ai_protocol);
 
-	if ((sockfd = socket(conn->ai_family, conn->ai_socktype, conn->ai_protocol)) == -1) {
+	if ((sockfd = socket((struct addrinfo *)(conn)->ai_family, conn->ai_socktype, conn->ai_protocol)) == -1) {
 		error(-1, "Failed to create socket.\n");
 	}
 
