@@ -98,8 +98,6 @@ void listenSocket(int sockfd) {
 int estConnection(int sockfd, struct addrinfo *conn) {
 	int status = 0;
 
-	printf("sockfd: %d, %d, %d\n", sockfd, conn->ai_addr, conn->ai_addrlen);
-
 	if ((status = connect(sockfd, conn->ai_addr, conn->ai_addrlen)) == -1) {
 		error(3, "Failed to establish connection from Client.\n");
 	}
@@ -167,13 +165,13 @@ int checkForChosenFile(char *filename, char **files, int numFiles) {
 }
 
 // send the files contents back to the client
-//int sendFile(char *addr, char *port, char *filename) {
-int sendFile(int sockfd, char *filename) {
-	//sleep(2);
-	//// set up connection
-	//struct addrinfo *connection = createConnection(addr, port);
-	//int sockfd = createSocket(connection);
-	//estConnection(sockfd, connection);
+int sendFile(char *addr, char *port, char *filename) {
+//int sendFile(int sockfd, char *filename) {
+	sleep(2);
+	// set up connection
+	struct addrinfo *connection = createConnection(addr, port);
+	int sockfd = createSocket(connection);
+	estConnection(sockfd, connection);
 
 	// create a buffer to read in to
 	char buffer[2000];
@@ -214,18 +212,18 @@ int sendFile(int sockfd, char *filename) {
 	strcpy(buffer, "__done__");
 	send(sockfd, buffer, sizeof(buffer), 0);
 
-	//close(sockfd);
-	//freeaddrinfo(connection);
+	close(sockfd);
+	freeaddrinfo(connection);
 }
 
 // send the list of files back to the client
-//void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) { 
-void sendDirectory(int sockfd, char **directory, int numOfFiles) {
-	//sleep(2);
-	//// setup connection
-	//struct addrinfo *connection = createConnection(addr, port);
-	//int sockfd = createSocket(connection);
-	//estConnection(sockfd, connection);
+void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) { 
+//void sendDirectory(int sockfd, char **directory, int numOfFiles) {
+	sleep(2);
+	// setup connection
+	struct addrinfo *connection = createConnection(addr, port);
+	int sockfd = createSocket(connection);
+	estConnection(sockfd, connection);
 
 	int i;
 	for (i = 0; i < numOfFiles; i++) {
@@ -237,11 +235,12 @@ void sendDirectory(int sockfd, char **directory, int numOfFiles) {
 	char* completed = "done";
 	send(sockfd, completed, strlen(completed), 0);
 
-	//close(datafd);
-	//freeaddrinfo(connection);
+	close(datafd);
+	freeaddrinfo(connection);
 }
 
-int processCmd(int clientfd, int datafd, char *cmd) {
+int processCmd(int clientfd, char *cmd) {
+//int processCmd(int clientfd, int datafd, char *cmd) {
 	if (strcmp(cmd, "g") == 0) {
 		//send(clientfd, good, strlen(good), 0);
 
@@ -329,22 +328,24 @@ void talkToClient(int clientfd) {
 		printf("cmd: %s\n", cmd);
 		send(clientfd, good, strlen(good), 0);
 		// create data socket
-		sleep(2);
-		strcpy(cmd, "l");
-		// set up connection
-		struct addrinfo *dataConn = createConnection(addr, port);
-		printf("addr: %s\nport: %s\n", addr, port);
-		printf("1: %s\n", cmd);
-		int datafd = createSocket(dataConn);
-		printf("2: %s\n", cmd);
-		estConnection(datafd, dataConn);
-		printf("3: %s\n", cmd);
+		//sleep(2);
+		//strcpy(cmd, "l");
+		//// set up connection
+		//struct addrinfo *dataConn = createConnection(addr, port);
+		//printf("addr: %s\nport: %s\n", addr, port);
+		//printf("1: %s\n", cmd);
+		//int datafd = createSocket(dataConn);
+		//printf("2: %s\n", cmd);
+		//estConnection(datafd, dataConn);
+		//printf("3: %s\n", cmd);
 
-		processCmd(clientfd, datafd, cmd);
+		//processCmd(clientfd, datafd, cmd);
+		processCmd(clientfd, cmd);
+
 		printf("4: %s\n", cmd);
 
-		close(datafd);
-		freeaddrinfo(dataConn);
+		//close(datafd);
+		//freeaddrinfo(dataConn);
 	}
 	else {
 		send(clientfd, bad, strlen(bad), 0);
