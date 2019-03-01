@@ -5,6 +5,7 @@
 // Much of the socket code was taken DIRECTLY from beej's code samples and suggestions.
 // https://beej.us/guide/bgnet/html/single/bgnet.html
 // I was also able to reuse some of my code from P1 and from a past class.
+// Help recieved from friend Dan Drapp
 // Noted within is extra help I needed/found.
 #include <stdio.h>
 #include <string.h>

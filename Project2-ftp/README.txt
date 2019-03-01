@@ -5,10 +5,19 @@ Project 2 - FTP
 This program was tested to work on Flip2 and 3.
 
 To compile just type make in the command line, while inside the Project2 folder.
-The file to read also needs to be in this
+The file to read also needs to be in this same directory /Project2/
 
+Commands to run:
 Server:
-	To run ftserver, use the command ./ftserver [port]
+	From the /Project2/ folder: "./ftserver [port]""
 
 Client:
-	To run ftclient, navigate to the Project2/Client folder.
+	From the /Project2/Client folder: 
+		Request List: "ftclient.py [server-addr] [port-on-server] -l [client-data-port]"
+
+		Request File: "ftclient.py [server-addr] [port-on-server] -g [filename] [client-data-port]"
+
+***IMPORTANT***
+Server must be running before the client can make a connection.
+The file to read from MUST be in /Project2/ folder.
+The file the client creates from requesting file can be found in /Project2/Client
