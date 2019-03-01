@@ -364,9 +364,9 @@ void talkToClient(int clientfd) {
 		int findFile = checkForChosenFile(filename, files, numFiles);
 		if (findFile) {
 
-			//printf("File found, sending %s to client\n", filename);
-			//char *file_found = "File found";
-			//send(clientfd, file_found, strlen(file_found), 0);
+			printf("File found, sending %s to client\n", filename);
+			char *file_found = "File found";
+			send(clientfd, file_found, strlen(file_found), 0);
 
 			// declare file name and clean it
 			char new_filename[100];
