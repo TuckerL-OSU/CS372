@@ -239,8 +239,8 @@ void sendDirectory(int sockfd, char **directory, int numOfFiles) {
 	//freeaddrinfo(connection);
 }
 
-int processCmd(int clientfd, char *cmd) {
-//int processCmd(int clientfd, int datafd, char *cmd) {
+//int processCmd(int clientfd, char *cmd) {
+int processCmd(int clientfd, int datafd, char *cmd) {
 	if (strcmp(cmd, "g") == 0) {
 		//send(clientfd, good, strlen(good), 0);
 
@@ -265,7 +265,7 @@ int processCmd(int clientfd, char *cmd) {
 			end += sprintf(end, "%s", filename);
 
 			//sendFile(addr, port, new_filename);
-			sendFile(clientfd, new_filename);
+			sendFile(datafd, new_filename);
 		}
 		else {
 			printf("Could not find file. Sending error to client.\n");
@@ -339,8 +339,8 @@ void talkToClient(int clientfd) {
 		estConnection(datafd, dataConn);
 		printf("3: %s\n", cmd);
 
-		//processCmd(clientfd, datafd, cmd);
-		processCmd(datafd, cmd);
+		processCmd(clientfd, datafd, cmd);
+		//processCmd(datafd, cmd);
 
 		printf("4: %s\n", cmd);
 
@@ -406,7 +406,7 @@ void talkToClient(int clientfd) {
 	//	printf("Got invalid command.\n");
 	//}
 
-	//printf("Waiting for more connections.\n");
+	printf("Waiting for more connections.\n");
 }
 
 // handles incomming connections during idle time
