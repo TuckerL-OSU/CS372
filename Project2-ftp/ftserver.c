@@ -321,7 +321,8 @@ void talkToClient(int clientfd) {
 	printf("A Client is connecting from: %s\n", addr);
 
 	// handle command
-	if (strcmp(cmd, "l") == 0 || strcmp(cmd, "g") == 0) {
+	if (strcmp(cmd, "g") == 0 || strcmp(cmd, "l") == 0) {
+		printf("cmd: %c", cmd);
 		send(clientfd, good, strlen(good), 0);
 		// create data socket
 		sleep(2);
