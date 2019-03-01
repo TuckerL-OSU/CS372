@@ -322,19 +322,19 @@ void talkToClient(int clientfd) {
 
 	// handle command
 	if (strcmp(cmd, "g") == 0 || strcmp(cmd, "l") == 0) {
-		printf("cmd: %c", cmd);
+		printf("cmd: %s\n", cmd);
 		send(clientfd, good, strlen(good), 0);
 		// create data socket
 		sleep(2);
 		// set up connection
-		struct addrinfo *connection = createConnection(addr, port);
-		int datafd = createSocket(connection);
-		estConnection(datafd, connection);
+		struct addrinfo *dataConn = createConnection(addr, port);
+		int datafd = createSocket(dataConn);
+		estConnection(datafd, dataConn);
 
 		processCmd(clientfd, datafd, cmd);
 
 		close(datafd);
-		freeaddrinfo(connection);
+		freeaddrinfo(dataConn);
 	}
 	else {
 		send(clientfd, bad, strlen(bad), 0);
