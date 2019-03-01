@@ -26,7 +26,7 @@ def createSocket():
 def estConnection():
     server_addr = sys.argv[1]        #We know the full path of flip. This will only work on flip
    
-    serverPort = int(sys.argv[2])                                       #Get the port number
+    server_port = int(sys.argv[2])                                       #Get the port number
     client_socket = socket(AF_INET,SOCK_STREAM)              #New socket
     
     client_socket.connect((server_addr, server_port))              #Call connect on it with the proper server name and server port
