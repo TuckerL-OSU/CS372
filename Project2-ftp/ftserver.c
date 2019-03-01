@@ -242,7 +242,7 @@ void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) {
 void talkToClient(int clientfd) {
 	// used to tell the client if their request was valid or not
 	char *good = "valid";
-	char *bad = "bad";
+	char *bad = "invalid";
 	// buffers for holding incoming information
 	char addr[100]; // makes connections easier to visualize
 	char port[100]; // port client wants to recieve data back on
