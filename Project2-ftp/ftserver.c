@@ -265,7 +265,7 @@ int processCmd(int clientfd, char *cmd) {
 			end += sprintf(end, "%s", filename);
 
 			//sendFile(addr, port, new_filename);
-			sendFile(datafd, new_filename);
+			sendFile(clientfd, new_filename);
 		}
 		else {
 			printf("Could not find file. Sending error to client.\n");
@@ -328,16 +328,16 @@ void talkToClient(int clientfd) {
 		printf("cmd: %s\n", cmd);
 		send(clientfd, good, strlen(good), 0);
 		// create data socket
-		//sleep(2);
+		sleep(2);
 		//strcpy(cmd, "l");
-		//// set up connection
-		//struct addrinfo *dataConn = createConnection(addr, port);
-		//printf("addr: %s\nport: %s\n", addr, port);
-		//printf("1: %s\n", cmd);
-		//int datafd = createSocket(dataConn);
-		//printf("2: %s\n", cmd);
-		//estConnection(datafd, dataConn);
-		//printf("3: %s\n", cmd);
+		// set up connection
+		struct addrinfo *dataConn = createConnection(addr, port);
+		printf("addr: %s\nport: %s\n", addr, port);
+		printf("1: %s\n", cmd);
+		int datafd = createSocket(dataConn);
+		printf("2: %s\n", cmd);
+		estConnection(datafd, dataConn);
+		printf("3: %s\n", cmd);
 
 		//processCmd(clientfd, datafd, cmd);
 		processCmd(datafd, cmd);
