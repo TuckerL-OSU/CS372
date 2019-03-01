@@ -328,7 +328,7 @@ void talkToClient(int clientfd) {
 		sleep(2);
 		// set up connection
 		struct addrinfo *dataConn = createConnection(addr, port);
-
+		printf("addr: %s\nport: %s\n", addr, port);
 		printf("1: %s\n", cmd);
 		int datafd = createSocket(dataConn);
 		printf("2: %s\n", cmd);
