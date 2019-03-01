@@ -290,7 +290,7 @@ int processCmd(int clientfd, int datafd, char *cmd) {
 		//send(clientfd, bad, strlen(bad), 0);
 		printf("Got invalid command.\n");
 	}
-	close(datafd);
+
 }
 
 void talkToClient(int clientfd) {
@@ -321,7 +321,7 @@ void talkToClient(int clientfd) {
 	printf("A Client is connecting from: %s\n", addr);
 
 	// handle command
-	if (strcmp(cmd, "g") == 0 || strcmp(cmd, "l") == 0) {
+	if (strcmp(cmd, "l") == 0 || strcmp(cmd, "g") == 0) {
 		send(clientfd, good, strlen(good), 0);
 		// create data socket
 		sleep(2);
@@ -332,7 +332,7 @@ void talkToClient(int clientfd) {
 
 		processCmd(clientfd, datafd, cmd);
 
-		//close(datafd);
+		close(datafd);
 		freeaddrinfo(connection);
 	}
 	else {
