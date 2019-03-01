@@ -66,10 +66,6 @@ def talkToServer(client_socket):
         print("Requesting list.")
         port = 4
 
-	# send IP, this is just to make it look nice on the server, not needed.
-    client_socket.send(getMyIP())
-    response = client_socket.recv(1024)
-
 	# send port number
     client_socket.send(sys.argv[port])  
     
@@ -82,6 +78,9 @@ def talkToServer(client_socket):
     
     client_socket.recv(1024)
     
+	# send IP, this is just to make it look nice on the server, not needed.
+    client_socket.send(getMyIP())
+    response = client_socket.recv(1024)
     
     if response == "invalid":                                                       #The server received an invalid command so inform the user and exit
         print("An invalid command was sent to the server.")
