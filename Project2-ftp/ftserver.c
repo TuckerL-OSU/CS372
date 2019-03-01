@@ -328,10 +328,15 @@ void talkToClient(int clientfd) {
 		sleep(2);
 		// set up connection
 		struct addrinfo *dataConn = createConnection(addr, port);
+
+		printf("1: %s\n", cmd);
 		int datafd = createSocket(dataConn);
+		printf("2: %s\n", cmd);
 		estConnection(datafd, dataConn);
+		printf("3: %s\n", cmd);
 
 		processCmd(clientfd, datafd, cmd);
+		printf("4: %s\n", cmd);
 
 		close(datafd);
 		freeaddrinfo(dataConn);
