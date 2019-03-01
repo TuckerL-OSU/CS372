@@ -45,7 +45,7 @@ def getMyIP():
 
 
 def fileHandler(data_socket):
-    fd = open(sys.argv[4], "w")   
+    fd = open(sys.argv[4], "w+")   
     buffer = data_socket.recv(1000)
     
 	# keep ingesting file while end of transfer hasn't been hit
