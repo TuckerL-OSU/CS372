@@ -285,7 +285,7 @@ int processCmd(int clientfd, char *cmd) {
 		int numFiles = getDirectory(files);
 
 		//sendDirectory(addr, port, files, numFiles);
-		sendDirectory(datafd, files, numFiles);
+		sendDirectory(clientfd, files, numFiles);
 
 		deleteContainer_filesInDir(files, 500);
 	}
