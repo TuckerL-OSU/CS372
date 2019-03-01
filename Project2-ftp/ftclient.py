@@ -18,7 +18,7 @@ def createSocket():
     client_port = int(sys.argv[numArguments])
     sockfd = socket(AF_INET, SOCK_STREAM)
     sockfd.bind(('', client_port))
-    sockfd.listen(1)
+    sockfd.listen(0)
     data_socket, address = sockfd.accept()
     return data_socket
 
