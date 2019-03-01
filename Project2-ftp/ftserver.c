@@ -20,6 +20,10 @@
 
 #define MAX_CONNS 5
 
+// used to tell the client if their request was valid or not
+char *good = "valid";
+char *bad = "invalid";
+
 void error(int exitCode, const char *msg) {
 	// use stderr to print error so we can set exit codes
 	// for debugging and potential future use
@@ -163,12 +167,13 @@ int checkForChosenFile(char *filename, char **files, int numFiles) {
 }
 
 // send the files contents back to the client
-int sendFile(char *addr, char *port, char *filename) {
-	sleep(2);
-	// set up connection
-	struct addrinfo *connection = createConnection(addr, port);
-	int sockfd = createSocket(connection);
-	estConnection(sockfd, connection);
+//int sendFile(char *addr, char *port, char *filename) {
+int sendFile(int sockfd, char *filename) {
+	//sleep(2);
+	//// set up connection
+	//struct addrinfo *connection = createConnection(addr, port);
+	//int sockfd = createSocket(connection);
+	//estConnection(sockfd, connection);
 
 	// create a buffer to read in to
 	char buffer[2000];
@@ -209,17 +214,18 @@ int sendFile(char *addr, char *port, char *filename) {
 	strcpy(buffer, "__done__");
 	send(sockfd, buffer, sizeof(buffer), 0);
 
-	close(sockfd);
-	freeaddrinfo(connection);
+	//close(sockfd);
+	//freeaddrinfo(connection);
 }
 
 // send the list of files back to the client
-void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) { 
-	sleep(2);
-	// setup connection
-	struct addrinfo *connection = createConnection(addr, port);
-	int sockfd = createSocket(connection);
-	estConnection(sockfd, connection);
+//void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) { 
+void sendDirectory(int sockfd, char **directory, int numOfFiles) {
+	//sleep(2);
+	//// setup connection
+	//struct addrinfo *connection = createConnection(addr, port);
+	//int sockfd = createSocket(connection);
+	//estConnection(sockfd, connection);
 
 	int i;
 	for (i = 0; i < numOfFiles; i++) {
@@ -231,41 +237,11 @@ void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) {
 	char* completed = "done";
 	send(sockfd, completed, strlen(completed), 0);
 
-	close(sockfd);
-	freeaddrinfo(connection);
+	//close(datafd);
+	//freeaddrinfo(connection);
 }
 
-//int processCmd(char *cmd) {
-//
-//}
-
-void talkToClient(int clientfd) {
-	// used to tell the client if their request was valid or not
-	char *good = "valid";
-	char *bad = "invalid";
-	// buffers for holding incoming information
-	char addr[100]; // makes connections easier to visualize
-	char port[100]; // port client wants to recieve data back on
-	char cmd[500]; // command from client
-
-	// sanitize port
-	memset(port, 0, sizeof(port));              
-	recv(clientfd, port, sizeof(port) - 1, 0);
-
-	send(clientfd, good, strlen(good), 0);
-
-	// sanitize command
-	memset(cmd, 0, sizeof(cmd));
-	recv(clientfd, cmd, sizeof(cmd) - 1, 0);
-
-	send(clientfd, good, strlen(good), 0);
-
-	// sanitize address
-	memset(addr, 0, sizeof(addr));
-	recv(clientfd, addr, sizeof(addr) - 1, 0);
-
-	printf("A Client is connecting from: %s\n", addr);
-
+int processCmd(int clientfd, int datafd, char *cmd) {
 	if (strcmp(cmd, "g") == 0) {
 		send(clientfd, good, strlen(good), 0);
 
@@ -316,6 +292,99 @@ void talkToClient(int clientfd) {
 		send(clientfd, bad, strlen(bad), 0);
 		printf("Got invalid command.\n");
 	}
+
+}
+
+void talkToClient(int clientfd) {
+	//// used to tell the client if their request was valid or not
+	//char *good = "valid";
+	//char *bad = "invalid";
+	// buffers for holding incoming information
+	char addr[100]; // makes connections easier to visualize
+	char port[100]; // port client wants to recieve data back on
+	char cmd[500]; // command from client
+
+	// sanitize port
+	memset(port, 0, sizeof(port));              
+	recv(clientfd, port, sizeof(port) - 1, 0);
+
+	send(clientfd, good, strlen(good), 0);
+
+	// sanitize command
+	memset(cmd, 0, sizeof(cmd));
+	recv(clientfd, cmd, sizeof(cmd) - 1, 0);
+
+	send(clientfd, good, strlen(good), 0);
+
+	// sanitize address
+	memset(addr, 0, sizeof(addr));
+	recv(clientfd, addr, sizeof(addr) - 1, 0);
+
+	printf("A Client is connecting from: %s\n", addr);
+
+	// create data socket
+	sleep(2);
+	// set up connection
+	struct addrinfo *connection = createConnection(addr, port);
+	int datafd = createSocket(connection);
+	estConnection(datafd, connection);
+
+	// handle command
+	processCmd(clientfd, datafd, cmd);
+
+	close(datafd);
+	freeaddrinfo(connection);
+
+	//if (strcmp(cmd, "g") == 0) {
+	//	send(clientfd, good, strlen(good), 0);
+
+	//	char filename[100];
+	//	memset(filename, 0, sizeof(filename));
+	//	recv(clientfd, filename, sizeof(filename) - 1, 0);
+	//	printf("File: %s requested \n", filename);
+
+	//	char** files = initContainer_filesInDir(500);
+	//	int numFiles = getDirectory(files);         //Use the function to check if the file is there
+	//	int findFile = checkForChosenFile(filename, files, numFiles);
+	//	if (findFile) {
+
+	//		printf("File found, sending %s to client\n", filename);
+	//		char *file_found = "File found";
+	//		send(clientfd, file_found, strlen(file_found), 0);
+
+	//		char new_filename[100];
+	//		memset(new_filename, 0, sizeof(new_filename));
+	//		strcpy(new_filename, "./");
+	//		char * end = new_filename + strlen(new_filename);
+	//		end += sprintf(end, "%s", filename);
+
+	//		sendFile(addr, port, new_filename);
+	//	}
+	//	else {
+	//		printf("Could not find file. Sending error to client.\n");
+	//		char * notFound = "File not found";
+	//		send(clientfd, notFound, 100, 0);
+	//	}
+	//	deleteContainer_filesInDir(files, 500);
+	//}
+	//else if (strcmp(cmd, "l") == 0) {                  //Directory request so get the number of files and send them
+
+	//	send(clientfd, good, strlen(good), 0);
+	//	printf("File list requested \n");
+	//	printf("Sending file list to %s \n", addr);
+
+	//	char** files = initContainer_filesInDir(500);
+
+	//	int numFiles = getDirectory(files);
+
+	//	sendDirectory(addr, port, files, numFiles);
+
+	//	deleteContainer_filesInDir(files, 500);
+	//}
+	//else {
+	//	send(clientfd, bad, strlen(bad), 0);
+	//	printf("Got invalid command.\n");
+	//}
 
 	printf("Waiting for more connections.\n");
 }
