@@ -320,24 +320,26 @@ void talkToClient(int clientfd) {
 
 	printf("A Client is connecting from: %s\n", addr);
 
-	// create data socket
-	sleep(2);
-	// set up connection
-	struct addrinfo *connection = createConnection(addr, port);
-	int datafd = createSocket(connection);
-	estConnection(datafd, connection);
-
 	// handle command
 	if (strcmp(cmd, "g") == 0 || strcmp(cmd, "l") == 0) {
 		send(clientfd, good, strlen(good), 0);
+		// create data socket
+		sleep(2);
+		// set up connection
+		struct addrinfo *connection = createConnection(addr, port);
+		int datafd = createSocket(connection);
+		estConnection(datafd, connection);
+
 		processCmd(clientfd, datafd, cmd);
+
+		close(datafd);
+		freeaddrinfo(connection);
 	}
 	else {
 		send(clientfd, bad, strlen(bad), 0);
 	}
 	
-	close(datafd);
-	freeaddrinfo(connection);
+	
 
 	//if (strcmp(cmd, "g") == 0) {
 	//	send(clientfd, good, strlen(good), 0);
