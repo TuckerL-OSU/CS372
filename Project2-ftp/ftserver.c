@@ -354,7 +354,7 @@ void talkToClient(int clientfd) {
 		else {
 			printf("Unknown file: %s.\n", filename);
 			char *not_found = "File not found";
-			send(clientfd, not_found, strlen(not_found), 0);
+			send(clientfd, not_found, 100, 0); // hardcoded length to fix compile error
 		}
 		deleteContainer_filesInDir(files, 500);
 	}
