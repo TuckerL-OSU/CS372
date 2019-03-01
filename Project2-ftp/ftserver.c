@@ -20,10 +20,6 @@
 
 #define MAX_CONNS 5
 
-// used to tell the client if their request was valid or not
-char *good = "valid";
-char *bad = "invalid";
-
 void error(int exitCode, const char *msg) {
 	// use stderr to print error so we can set exit codes
 	// for debugging and potential future use
@@ -241,16 +237,9 @@ void sendDirectory(int sockfd, char **directory, int numOfFiles) {
 	//freeaddrinfo(connection);
 }
 
-int processCmd(int clientfd, char *cmd) {
-	// create data socket
-	sleep(2);
-	// set up connection
-	struct addrinfo *connection = createConnection(addr, port);
-	int datafd = createSocket(connection);
-	estConnection(datafd, connection);
-
+int processCmd(int clientfd, int datafd, char *cmd) {
 	if (strcmp(cmd, "g") == 0) {
-		send(clientfd, good, strlen(good), 0);
+		//send(clientfd, good, strlen(good), 0);
 
 		char filename[100];
 		memset(filename, 0, sizeof(filename));
@@ -284,7 +273,7 @@ int processCmd(int clientfd, char *cmd) {
 	}
 	else if (strcmp(cmd, "l") == 0) {                  //Directory request so get the number of files and send them
 
-		send(clientfd, good, strlen(good), 0);
+		//send(clientfd, good, strlen(good), 0);
 		printf("File list requested \n");
 		printf("Sending file list Client.\n");
 
@@ -298,17 +287,16 @@ int processCmd(int clientfd, char *cmd) {
 		deleteContainer_filesInDir(files, 500);
 	}
 	else {
-		send(clientfd, bad, strlen(bad), 0);
+		//send(clientfd, bad, strlen(bad), 0);
 		printf("Got invalid command.\n");
 	}
-	close(datafd);
-	freeaddrinfo(connection);
+
 }
 
 void talkToClient(int clientfd) {
-	//// used to tell the client if their request was valid or not
-	//char *good = "valid";
-	//char *bad = "invalid";
+	// used to tell the client if their request was valid or not
+	char *good = "valid";
+	char *bad = "invalid";
 	// buffers for holding incoming information
 	char addr[100]; // makes connections easier to visualize
 	char port[100]; // port client wants to recieve data back on
@@ -332,8 +320,24 @@ void talkToClient(int clientfd) {
 
 	printf("A Client is connecting from: %s\n", addr);
 
+	// create data socket
+	sleep(2);
+	// set up connection
+	struct addrinfo *connection = createConnection(addr, port);
+	int datafd = createSocket(connection);
+	estConnection(datafd, connection);
+
 	// handle command
-	processCmd(clientfd, cmd);
+	if (strcmp(cmd, "g") == 0 || strcmp(cmd, "l") == 0) {
+		send(clientfd, good, strlen(good), 0);
+		processCmd(clientfd, datafd, cmd);
+	}
+	else {
+		send(clientfd, bad, strlen(bad), 0);
+	}
+	
+	close(datafd);
+	freeaddrinfo(connection);
 
 	//if (strcmp(cmd, "g") == 0) {
 	//	send(clientfd, good, strlen(good), 0);
