@@ -235,7 +235,7 @@ void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) {
 	char* completed = "done";
 	send(sockfd, completed, strlen(completed), 0);
 
-	close(datafd);
+	close(sockfd);
 	freeaddrinfo(connection);
 }
 
