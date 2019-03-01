@@ -1,6 +1,6 @@
 default:
-	gcc -o ftserver ./Server/ftserver.c
-	chmod +x ./Client/ftclient.py
+	gcc -o ftserver ftserver.c
+	chmod +x ftclient.py
 
 clean:
 	rm ftserver
