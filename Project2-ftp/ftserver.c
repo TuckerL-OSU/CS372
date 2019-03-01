@@ -98,6 +98,8 @@ void listenSocket(int sockfd) {
 int estConnection(int sockfd, struct addrinfo *conn) {
 	int status = 0;
 
+	printf("sockfd: %d\n", sockfd);
+
 	if ((status = connect(sockfd, conn->ai_addr, conn->ai_addrlen)) == -1) {
 		error(3, "Failed to establish connection from Client.\n");
 	}
