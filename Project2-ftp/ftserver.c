@@ -241,7 +241,14 @@ void sendDirectory(int sockfd, char **directory, int numOfFiles) {
 	//freeaddrinfo(connection);
 }
 
-int processCmd(int clientfd, int datafd, char *cmd) {
+int processCmd(int clientfd, char *cmd) {
+	// create data socket
+	sleep(2);
+	// set up connection
+	struct addrinfo *connection = createConnection(addr, port);
+	int datafd = createSocket(connection);
+	estConnection(datafd, connection);
+
 	if (strcmp(cmd, "g") == 0) {
 		send(clientfd, good, strlen(good), 0);
 
@@ -324,15 +331,8 @@ void talkToClient(int clientfd) {
 
 	printf("A Client is connecting from: %s\n", addr);
 
-	// create data socket
-	sleep(2);
-	// set up connection
-	struct addrinfo *connection = createConnection(addr, port);
-	int datafd = createSocket(connection);
-	estConnection(datafd, connection);
-
 	// handle command
-	processCmd(clientfd, datafd, cmd);
+	processCmd(clientfd, cmd);
 
 	close(datafd);
 	freeaddrinfo(connection);
