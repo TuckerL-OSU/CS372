@@ -301,7 +301,8 @@ int processCmd(int clientfd, char *cmd) {
 		send(clientfd, bad, strlen(bad), 0);
 		printf("Got invalid command.\n");
 	}
-
+	close(datafd);
+	freeaddrinfo(connection);
 }
 
 void talkToClient(int clientfd) {
@@ -333,9 +334,6 @@ void talkToClient(int clientfd) {
 
 	// handle command
 	processCmd(clientfd, cmd);
-
-	close(datafd);
-	freeaddrinfo(connection);
 
 	//if (strcmp(cmd, "g") == 0) {
 	//	send(clientfd, good, strlen(good), 0);
