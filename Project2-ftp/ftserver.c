@@ -167,11 +167,11 @@ int checkForChosenFile(char *filename, char **files, int numFiles) {
 // send the files contents back to the client
 //int sendFile(char *addr, char *port, char *filename) {
 int sendFile(int sockfd, char *filename) {
-	sleep(2);
-	// set up connection
-	struct addrinfo *connection = createConnection(addr, port);
-	int sockfd = createSocket(connection);
-	estConnection(sockfd, connection);
+	//sleep(2);
+	//// set up connection
+	//struct addrinfo *connection = createConnection(addr, port);
+	//int sockfd = createSocket(connection);
+	//estConnection(sockfd, connection);
 
 	// create a buffer to read in to
 	char buffer[2000];
@@ -212,18 +212,18 @@ int sendFile(int sockfd, char *filename) {
 	strcpy(buffer, "__done__");
 	send(sockfd, buffer, sizeof(buffer), 0);
 
-	close(sockfd);
-	freeaddrinfo(connection);
+	//close(sockfd);
+	//freeaddrinfo(connection);
 }
 
 // send the list of files back to the client
 //void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) { 
 void sendDirectory(int sockfd, char **directory, int numOfFiles) {
-	sleep(2);
-	// setup connection
-	struct addrinfo *connection = createConnection(addr, port);
-	int sockfd = createSocket(connection);
-	estConnection(sockfd, connection);
+	//sleep(2);
+	//// setup connection
+	//struct addrinfo *connection = createConnection(addr, port);
+	//int sockfd = createSocket(connection);
+	//estConnection(sockfd, connection);
 
 	int i;
 	for (i = 0; i < numOfFiles; i++) {
@@ -235,8 +235,8 @@ void sendDirectory(int sockfd, char **directory, int numOfFiles) {
 	char* completed = "done";
 	send(sockfd, completed, strlen(completed), 0);
 
-	close(sockfd);
-	freeaddrinfo(connection);
+	//close(sockfd);
+	//freeaddrinfo(connection);
 }
 
 int processCmd(int clientfd, char *cmd) {
@@ -340,7 +340,7 @@ void talkToClient(int clientfd) {
 		//printf("3: %s\n", cmd);
 
 		//processCmd(clientfd, datafd, cmd);
-		processCmd(clientfd, cmd);
+		processCmd(datafd, cmd);
 
 		printf("4: %s\n", cmd);
 
