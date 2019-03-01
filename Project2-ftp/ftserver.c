@@ -209,7 +209,7 @@ int sendFile(char *addr, char *port, char *filename) {
 
 	// sanitize buffer out here, to send end of transmission flag
 	memset(buffer, 0, sizeof(buffer));
-	strcpy(buffer, "__done__");
+	strcpy(buffer, "end_of_file");
 	send(sockfd, buffer, sizeof(buffer), 0);
 
 	close(sockfd);
@@ -232,7 +232,7 @@ void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) {
 		send(sockfd, directory[i], 100, 0);
 	}
 
-	char* completed = "done";
+	char* completed = "end_of_list";
 	send(sockfd, completed, strlen(completed), 0);
 
 	close(sockfd);
@@ -303,7 +303,7 @@ void talkToClient(int clientfd) {
 	// buffers for holding incoming information
 	char addr[100]; // makes connections easier to visualize
 	char port[100]; // port client wants to recieve data back on
-	char cmd[500]; // command from client
+	char cmd[100]; // command from client
 
 	// sanitize port
 	memset(port, 0, sizeof(port));              
@@ -360,11 +360,11 @@ void talkToClient(int clientfd) {
 		printf("File: %s requested \n", filename);
 
 		char** files = initContainer_filesInDir(500);
-		int numFiles = getDirectory(files);         //Use the function to check if the file is there
+		int numFiles = getDirectory(files);
 		int findFile = checkForChosenFile(filename, files, numFiles);
 		if (findFile) {
 
-			printf("File found, sending %s to client\n", filename);
+			printf("File found. Sending %s to client\n", filename);
 			char *file_found = "File found";
 			send(clientfd, file_found, strlen(file_found), 0);
 
@@ -376,7 +376,6 @@ void talkToClient(int clientfd) {
 			strcpy(new_filename, "./");
 			char * end = new_filename + strlen(new_filename);
 			end += sprintf(end, "%s", filename);
-			printf("new file: %s\n", new_filename);
 
 			sendFile(addr, port, new_filename);
 		}
@@ -428,14 +427,12 @@ void waitForConnection(int sockfd) {
 	}
 }
 
-
 int main(int argc, char *argv[]) {
 	if (argc != 2) {                  //We already know the usage is the executable plus the port number
-		fprintf(stderr, "Usage: ./ftserver [server]\n");
-		exit(1);
+		error(1, "Incorrect Arguments. Try \"./ftserver [port]\"\n");
 	}
 
-	printf("Server now listening on port %s\n", argv[1]);   //Now we just call all the functions we wrote in main
+	printf("Server is listening on port: %s\n", argv[1]);   //Now we just call all the functions we wrote in main
 	struct addrinfo* res = openConnection(argv[1]);
 	int sockfd = createSocket(res);
 	bindSocket(sockfd, res);
