@@ -300,7 +300,7 @@ void talkToClient(int clientfd) {
 	}
 	else if (strcmp(cmd, "l") == 0) {                  //Directory request so get the number of files and send them
 
-		send(new_fd, good, strlen(good), 0);
+		send(clientfd, good, strlen(good), 0);
 		printf("File list requested \n");
 		printf("Sending file list to %s \n", addr);
 
