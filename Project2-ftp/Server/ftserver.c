@@ -99,6 +99,7 @@ int estConnection(int sockfd, struct addrinfo *conn) {
 
 	if ((status = connect(sockfd, conn->ai_addr, conn->ai_addrlen)) == -1) {
 		error(0, "Failed to establish connection from Client.\n");
+		close(sockfd);
 	}
 
 	return status;
