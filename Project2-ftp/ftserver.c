@@ -71,8 +71,6 @@ struct addrinfo *createConnection(char *addr, char *port) {
 int createSocket(struct addrinfo *conn) {
 	int sockfd;
 
-	printf("createSocket info: %d, %d, %d\n", conn->ai_family, conn->ai_socktype, conn->ai_protocol);
-
 	if ((sockfd = socket(conn->ai_family, conn->ai_socktype, conn->ai_protocol)) == -1) {
 		error(-1, "Failed to create socket.\n");
 	}
@@ -323,6 +321,62 @@ void talkToClient(int clientfd) {
 
 	printf("A Client is connecting from: %s\n", addr);
 
+	// send a good/bad response message depending on command,
+	// if the command was valid, execute it
+	// get a file
+	if (strcmp(cmd, "g") == 0) {
+		send(clientfd, good, strlen(good), 0);
+
+		char filename[100];
+		memset(filename, 0, sizeof(filename));
+		recv(clientfd, filename, sizeof(filename) - 1, 0);
+		printf("Client requested file: %s\n", filename);
+
+		char **files = initContainer_filesInDir(500);
+		int numFiles = getDirectory(files);
+		int fileFound = checkForChosenFile(filename, files, numFiles);
+		if (findFound) {
+			printf("File found. Sending \"%s\" to Client.\n", filename);
+			char *file_found = "File found";
+			send(clientfd, fileFound, strlen(file_found), 0);
+
+			// declare file name and clean it
+			char new_filename[100];
+			memset(new_filename, 0, sizeof(new_filename));
+			
+			// append current directory extension to beginning of file name
+			strcpy(new_filename, "./");
+			char *filepathName = new_filename + strlen(new_filename);
+			filepathName += sprintf(filepathName, "%s", filename);
+
+			sendFile(addr, port, new_filename);
+		}
+		else {
+			printf("Unknown file: %s.\n", filename);
+			char *not_found = "File not found";
+			send(clientfd, not_found, strlen(no_found), 0);
+		}
+		deleteContainer_filesInDir(files, 500);
+	}
+	// get the list of files
+	else if (strcmp(cmd, "l") == 0) {
+		send(clientfd, good, strlen(good), 0);
+		printf("Sending file list to: %s\n", addr);
+
+		char **files = initContainer_filesInDir(500);
+
+		int numFiles = getDirectory(files);
+
+		sendDirectory(addr, port, files, numFiles);
+
+		deleteContainer_filesInDir(files, 500);
+	}
+	// invalid command
+	else {
+		send(clientfd, bad, strlen(bad), 0);
+		printf("Invalid command.\n");
+	}
+
 	//// handle command
 	//if (strcmp(cmd, "g") == 0 || strcmp(cmd, "l") == 0) {
 	//	printf("cmd: %s\n", cmd);
@@ -350,60 +404,6 @@ void talkToClient(int clientfd) {
 	//else {
 	//	send(clientfd, bad, strlen(bad), 0);
 	//}
-	
-	if (strcmp(cmd, "g") == 0) {
-		send(clientfd, good, strlen(good), 0);
-
-		char filename[100];
-		memset(filename, 0, sizeof(filename));
-		recv(clientfd, filename, sizeof(filename) - 1, 0);
-		printf("File: %s requested \n", filename);
-
-		char** files = initContainer_filesInDir(500);
-		int numFiles = getDirectory(files);
-		int findFile = checkForChosenFile(filename, files, numFiles);
-		if (findFile) {
-
-			printf("File found. Sending %s to client\n", filename);
-			char *file_found = "File found";
-			send(clientfd, file_found, strlen(file_found), 0);
-
-			// declare file name and clean it
-			char new_filename[100];
-			memset(new_filename, 0, sizeof(new_filename));
-			
-			// append current directory extension to beginning of file name
-			strcpy(new_filename, "./");
-			char * end = new_filename + strlen(new_filename);
-			end += sprintf(end, "%s", filename);
-
-			sendFile(addr, port, new_filename);
-		}
-		else {
-			printf("Could not find file. Sending error to client.\n");
-			char * notFound = "File not found";
-			send(clientfd, notFound, 100, 0);
-		}
-		deleteContainer_filesInDir(files, 500);
-	}
-	else if (strcmp(cmd, "l") == 0) {                  //Directory request so get the number of files and send them
-
-		send(clientfd, good, strlen(good), 0);
-		printf("File list requested \n");
-		printf("Sending file list to %s \n", addr);
-
-		char** files = initContainer_filesInDir(500);
-
-		int numFiles = getDirectory(files);
-
-		sendDirectory(addr, port, files, numFiles);
-
-		deleteContainer_filesInDir(files, 500);
-	}
-	else {
-		send(clientfd, bad, strlen(bad), 0);
-		printf("Got invalid command.\n");
-	}
 
 	printf("Waiting for more connections.\n");
 }
@@ -428,11 +428,11 @@ void waitForConnection(int sockfd) {
 }
 
 int main(int argc, char *argv[]) {
-	if (argc != 2) {                  //We already know the usage is the executable plus the port number
+	if (argc != 2) {
 		error(1, "Incorrect Arguments. Try \"./ftserver [port]\"\n");
 	}
 
-	printf("Server is listening on port: %s\n", argv[1]);   //Now we just call all the functions we wrote in main
+	printf("Server is now listening on port: %s\n", argv[1]);
 	struct addrinfo* res = openConnection(argv[1]);
 	int sockfd = createSocket(res);
 	bindSocket(sockfd, res);

@@ -98,7 +98,7 @@ def talkToServer(client_socket):
 		response = client_socket.recv(1024)
 		# check if the server found the file we requested
 		if response != "File found": 
-			print("File not found")
+			print("Server couldn't find {}.".format(sys.argv[4]))
 			return
 	
 	# open the data socket for the server to send its response
