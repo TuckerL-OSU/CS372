@@ -338,7 +338,7 @@ void talkToClient(int clientfd) {
 		if (fileFound) {
 			printf("File found. Sending \"%s\" to Client.\n", filename);
 			char *file_found = "File found";
-			send(clientfd, fileFound, strlen(file_found), 0);
+			send(clientfd, file_found, strlen(file_found), 0);
 
 			// declare file name and clean it
 			char new_filename[100];
@@ -354,7 +354,7 @@ void talkToClient(int clientfd) {
 		else {
 			printf("Unknown file: %s.\n", filename);
 			char *not_found = "File not found";
-			send(clientfd, not_found, 100, 0); // hardcoded length to fix compile error
+			send(clientfd, not_found, strlen(not_found), 0);
 		}
 		deleteContainer_filesInDir(files, 500);
 	}
