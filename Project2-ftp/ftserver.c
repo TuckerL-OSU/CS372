@@ -239,62 +239,62 @@ void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) {
 	freeaddrinfo(connection);
 }
 
-int processCmd(int clientfd, char *cmd) {
-//int processCmd(int clientfd, int datafd, char *cmd) {
-	if (strcmp(cmd, "g") == 0) {
-		//send(clientfd, good, strlen(good), 0);
-
-		char filename[100];
-		memset(filename, 0, sizeof(filename));
-		recv(clientfd, filename, sizeof(filename) - 1, 0);
-		printf("File: %s requested \n", filename);
-
-		char** files = initContainer_filesInDir(500);
-		int numFiles = getDirectory(files);         //Use the function to check if the file is there
-		int findFile = checkForChosenFile(filename, files, numFiles);
-		if (findFile) {
-
-			printf("File found, sending %s to client\n", filename);
-			char *file_found = "File found";
-			send(clientfd, file_found, strlen(file_found), 0);
-
-			char new_filename[100];
-			memset(new_filename, 0, sizeof(new_filename));
-			strcpy(new_filename, "./");
-			char * end = new_filename + strlen(new_filename);
-			end += sprintf(end, "%s", filename);
-
-			//sendFile(addr, port, new_filename);
-			sendFile(datafd, new_filename);
-		}
-		else {
-			printf("Could not find file. Sending error to client.\n");
-			char * notFound = "File not found";
-			send(clientfd, notFound, 100, 0);
-		}
-		deleteContainer_filesInDir(files, 500);
-	}
-	else if (strcmp(cmd, "l") == 0) {                  //Directory request so get the number of files and send them
-
-		//send(clientfd, good, strlen(good), 0);
-		printf("File list requested \n");
-		printf("Sending file list to Client.\n");
-
-		char** files = initContainer_filesInDir(500);
-
-		int numFiles = getDirectory(files);
-
-		//sendDirectory(addr, port, files, numFiles);
-		sendDirectory(datafd, files, numFiles);
-
-		deleteContainer_filesInDir(files, 500);
-	}
-	else {
-		//send(clientfd, bad, strlen(bad), 0);
-		printf("Got invalid command.\n");
-	}
-
-}
+//int processCmd(int clientfd, char *cmd) {
+////int processCmd(int clientfd, int datafd, char *cmd) {
+//	if (strcmp(cmd, "g") == 0) {
+//		//send(clientfd, good, strlen(good), 0);
+//
+//		char filename[100];
+//		memset(filename, 0, sizeof(filename));
+//		recv(clientfd, filename, sizeof(filename) - 1, 0);
+//		printf("File: %s requested \n", filename);
+//
+//		char** files = initContainer_filesInDir(500);
+//		int numFiles = getDirectory(files);         //Use the function to check if the file is there
+//		int findFile = checkForChosenFile(filename, files, numFiles);
+//		if (findFile) {
+//
+//			printf("File found, sending %s to client\n", filename);
+//			char *file_found = "File found";
+//			send(clientfd, file_found, strlen(file_found), 0);
+//
+//			char new_filename[100];
+//			memset(new_filename, 0, sizeof(new_filename));
+//			strcpy(new_filename, "./");
+//			char * end = new_filename + strlen(new_filename);
+//			end += sprintf(end, "%s", filename);
+//
+//			//sendFile(addr, port, new_filename);
+//			sendFile(datafd, new_filename);
+//		}
+//		else {
+//			printf("Could not find file. Sending error to client.\n");
+//			char * notFound = "File not found";
+//			send(clientfd, notFound, 100, 0);
+//		}
+//		deleteContainer_filesInDir(files, 500);
+//	}
+//	else if (strcmp(cmd, "l") == 0) {                  //Directory request so get the number of files and send them
+//
+//		//send(clientfd, good, strlen(good), 0);
+//		printf("File list requested \n");
+//		printf("Sending file list to Client.\n");
+//
+//		char** files = initContainer_filesInDir(500);
+//
+//		int numFiles = getDirectory(files);
+//
+//		//sendDirectory(addr, port, files, numFiles);
+//		sendDirectory(datafd, files, numFiles);
+//
+//		deleteContainer_filesInDir(files, 500);
+//	}
+//	else {
+//		//send(clientfd, bad, strlen(bad), 0);
+//		printf("Got invalid command.\n");
+//	}
+//
+//}
 
 void talkToClient(int clientfd) {
 	// used to tell the client if their request was valid or not
@@ -323,86 +323,86 @@ void talkToClient(int clientfd) {
 
 	printf("A Client is connecting from: %s\n", addr);
 
-	// handle command
-	if (strcmp(cmd, "g") == 0 || strcmp(cmd, "l") == 0) {
-		printf("cmd: %s\n", cmd);
-		send(clientfd, good, strlen(good), 0);
-		// create data socket
-		//sleep(2);
-		//strcpy(cmd, "l");
-		//// set up connection
-		//struct addrinfo *dataConn = createConnection(addr, port);
-		//printf("addr: %s\nport: %s\n", addr, port);
-		//printf("1: %s\n", cmd);
-		//int datafd = createSocket(dataConn);
-		//printf("2: %s\n", cmd);
-		//estConnection(datafd, dataConn);
-		//printf("3: %s\n", cmd);
-
-		//processCmd(clientfd, datafd, cmd);
-		processCmd(clientfd, cmd);
-
-		printf("4: %s\n", cmd);
-
-		//close(datafd);
-		//freeaddrinfo(dataConn);
-	}
-	else {
-		send(clientfd, bad, strlen(bad), 0);
-	}
-	
-	
-
-	//if (strcmp(cmd, "g") == 0) {
+	//// handle command
+	//if (strcmp(cmd, "g") == 0 || strcmp(cmd, "l") == 0) {
+	//	printf("cmd: %s\n", cmd);
 	//	send(clientfd, good, strlen(good), 0);
+	//	// create data socket
+	//	//sleep(2);
+	//	//strcpy(cmd, "l");
+	//	//// set up connection
+	//	//struct addrinfo *dataConn = createConnection(addr, port);
+	//	//printf("addr: %s\nport: %s\n", addr, port);
+	//	//printf("1: %s\n", cmd);
+	//	//int datafd = createSocket(dataConn);
+	//	//printf("2: %s\n", cmd);
+	//	//estConnection(datafd, dataConn);
+	//	//printf("3: %s\n", cmd);
 
-	//	char filename[100];
-	//	memset(filename, 0, sizeof(filename));
-	//	recv(clientfd, filename, sizeof(filename) - 1, 0);
-	//	printf("File: %s requested \n", filename);
+	//	//processCmd(clientfd, datafd, cmd);
+	//	processCmd(clientfd, cmd);
 
-	//	char** files = initContainer_filesInDir(500);
-	//	int numFiles = getDirectory(files);         //Use the function to check if the file is there
-	//	int findFile = checkForChosenFile(filename, files, numFiles);
-	//	if (findFile) {
+	//	printf("4: %s\n", cmd);
 
-	//		printf("File found, sending %s to client\n", filename);
-	//		char *file_found = "File found";
-	//		send(clientfd, file_found, strlen(file_found), 0);
-
-	//		char new_filename[100];
-	//		memset(new_filename, 0, sizeof(new_filename));
-	//		strcpy(new_filename, "./");
-	//		char * end = new_filename + strlen(new_filename);
-	//		end += sprintf(end, "%s", filename);
-
-	//		sendFile(addr, port, new_filename);
-	//	}
-	//	else {
-	//		printf("Could not find file. Sending error to client.\n");
-	//		char * notFound = "File not found";
-	//		send(clientfd, notFound, 100, 0);
-	//	}
-	//	deleteContainer_filesInDir(files, 500);
-	//}
-	//else if (strcmp(cmd, "l") == 0) {                  //Directory request so get the number of files and send them
-
-	//	send(clientfd, good, strlen(good), 0);
-	//	printf("File list requested \n");
-	//	printf("Sending file list to %s \n", addr);
-
-	//	char** files = initContainer_filesInDir(500);
-
-	//	int numFiles = getDirectory(files);
-
-	//	sendDirectory(addr, port, files, numFiles);
-
-	//	deleteContainer_filesInDir(files, 500);
+	//	//close(datafd);
+	//	//freeaddrinfo(dataConn);
 	//}
 	//else {
 	//	send(clientfd, bad, strlen(bad), 0);
-	//	printf("Got invalid command.\n");
 	//}
+	
+	
+
+	if (strcmp(cmd, "g") == 0) {
+		send(clientfd, good, strlen(good), 0);
+
+		char filename[100];
+		memset(filename, 0, sizeof(filename));
+		recv(clientfd, filename, sizeof(filename) - 1, 0);
+		printf("File: %s requested \n", filename);
+
+		char** files = initContainer_filesInDir(500);
+		int numFiles = getDirectory(files);         //Use the function to check if the file is there
+		int findFile = checkForChosenFile(filename, files, numFiles);
+		if (findFile) {
+
+			printf("File found, sending %s to client\n", filename);
+			char *file_found = "File found";
+			send(clientfd, file_found, strlen(file_found), 0);
+
+			char new_filename[100];
+			memset(new_filename, 0, sizeof(new_filename));
+			strcpy(new_filename, "./");
+			char * end = new_filename + strlen(new_filename);
+			end += sprintf(end, "%s", filename);
+
+			sendFile(addr, port, new_filename);
+		}
+		else {
+			printf("Could not find file. Sending error to client.\n");
+			char * notFound = "File not found";
+			send(clientfd, notFound, 100, 0);
+		}
+		deleteContainer_filesInDir(files, 500);
+	}
+	else if (strcmp(cmd, "l") == 0) {                  //Directory request so get the number of files and send them
+
+		send(clientfd, good, strlen(good), 0);
+		printf("File list requested \n");
+		printf("Sending file list to %s \n", addr);
+
+		char** files = initContainer_filesInDir(500);
+
+		int numFiles = getDirectory(files);
+
+		sendDirectory(addr, port, files, numFiles);
+
+		deleteContainer_filesInDir(files, 500);
+	}
+	else {
+		send(clientfd, bad, strlen(bad), 0);
+		printf("Got invalid command.\n");
+	}
 
 	printf("Waiting for more connections.\n");
 }
