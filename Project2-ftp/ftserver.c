@@ -265,7 +265,8 @@ int processCmd(int clientfd, int datafd, char *cmd) {
 			char * end = new_filename + strlen(new_filename);
 			end += sprintf(end, "%s", filename);
 
-			sendFile(addr, port, new_filename);
+			//sendFile(addr, port, new_filename);
+			sendFile(datafd, new_filename);
 		}
 		else {
 			printf("Could not find file. Sending error to client.\n");
@@ -284,7 +285,8 @@ int processCmd(int clientfd, int datafd, char *cmd) {
 
 		int numFiles = getDirectory(files);
 
-		sendDirectory(addr, port, files, numFiles);
+		//sendDirectory(addr, port, files, numFiles);
+		sendDirectory(datafd, files, numFiles);
 
 		deleteContainer_filesInDir(files, 500);
 	}
