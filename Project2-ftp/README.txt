@@ -19,5 +19,6 @@ Client:
 
 ***IMPORTANT***
 Server must be running before the client can make a connection.
+Port chosen for either part needs to be ABOVE 10000.
 The file to read from MUST be in /Project2/ folder.
 The file the client creates from requesting file can be found in /Project2/Client
