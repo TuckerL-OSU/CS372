@@ -1,4 +1,4 @@
-default: ftserver.c
+default:
 	gcc -o ftserver ./Server/ftserver.c
 	chmod +x ./Client/ftclient.py
 
