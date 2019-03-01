@@ -71,6 +71,8 @@ struct addrinfo *createConnection(char *addr, char *port) {
 int createSocket(struct addrinfo *conn) {
 	int sockfd;
 
+	printf("createSocket info: %d, %d, %d\n", conn->ai_family, conn->ai_socktype, conn->ai_protocol);
+
 	if ((sockfd = socket(conn->ai_family, conn->ai_socktype, conn->ai_protocol)) == -1) {
 		error(-1, "Failed to create socket.\n");
 	}
