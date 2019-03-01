@@ -344,8 +344,8 @@ void talkToClient(int clientfd) {
 
 		printf("4: %s\n", cmd);
 
-		//close(datafd);
-		//freeaddrinfo(dataConn);
+		close(datafd);
+		freeaddrinfo(dataConn);
 	}
 	else {
 		send(clientfd, bad, strlen(bad), 0);
