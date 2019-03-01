@@ -248,11 +248,6 @@ void talkToClient(int clientfd) {
 	char port[100]; // port client wants to recieve data back on
 	char cmd[500]; // command from client
 
-	// sanitize address
-	memset(addr, 0, sizeof(addr));
-	recv(clientfd, addr, sizeof(addr) - 1, 0);
-
-	printf("A Client is connecting from: %s\n", addr);
 
 	// sanitize port
 	memset(port, 0, sizeof(port));              
@@ -265,6 +260,13 @@ void talkToClient(int clientfd) {
 	recv(clientfd, cmd, sizeof(cmd) - 1, 0);
 
 	send(clientfd, good, strlen(good), 0);
+
+	// sanitize address
+	memset(addr, 0, sizeof(addr));
+	recv(clientfd, addr, sizeof(addr) - 1, 0);
+
+	printf("A Client is connecting from: %s\n", addr);
+
 
 	if (strcmp(cmd, "g") == 0) {
 		send(clientfd, good, strlen(good), 0);
