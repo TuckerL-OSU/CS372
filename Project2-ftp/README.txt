@@ -16,7 +16,7 @@ Server:
 	From the directory it was compiled: "./ftserver [port]"
 
 Client:
-	From the /Project2/Client folder: 
+	From the directory it was compiled: 
 		Request List: "ftclient.py [server-addr] [port-on-server] -l [client-data-port]"
 
 		Request File: "ftclient.py [server-addr] [port-on-server] -g [filename] [client-data-port]"
