@@ -6,7 +6,7 @@
 # Most help taken from https://docs.python.org/2/howto/sockets.html and
 # https://realpython.com/python-sockets/ 
 # Help recieved from friend Dan Drapp
-# Noted within is extra help I needed/found.
+# Noted within is extra help I needed/found. 
 
 import sys
 from socket import *
