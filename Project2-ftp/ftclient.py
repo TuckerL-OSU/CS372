@@ -27,15 +27,18 @@ def createSocket():
 
 def estConnection():
 	# server to connect to address
-    server_addr = sys.argv[1] 
-   
+	if sys.argv[1] == "flip1" or sys.argv[1] == "flip2" or sys.argv[1] == "flip3":
+		server_addr = sys.argv[1] + ".engr.oregonstate.edu"
+	else:
+		server_addr = sys.argv[1]
+	
 	# port to connect to on the server
-    server_port = int(sys.argv[2])
-    client_socket = socket(AF_INET,SOCK_STREAM)
-    client_socket.connect((server_addr, server_port))
-    
-    return client_socket
-    
+	server_port = int(sys.argv[2])
+	client_socket = socket(AF_INET,SOCK_STREAM)
+	client_socket.connect((server_addr, server_port))
+	
+	return client_socket
+	
 
 # https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib
 def getMyIP():
@@ -57,7 +60,7 @@ def fileHandler(data_socket):
 def getList(data_socket):
     filename = data_socket.recv(100)
     
-	# keep ingesting file while end of transfer hasn't been hit
+	# keep ingesting list while end of transfer hasn't been hit
     while filename != "end_of_list":        
         print(filename)
         filename = data_socket.recv(100)
@@ -97,10 +100,11 @@ def talkToServer(client_socket):
 		client_socket.send(sys.argv[4])
 		response = client_socket.recv(1024)
 		# check if the server found the file we requested
-		if response != "File found": 
+		if response != "File Found": 
 			print("Server couldn't find {}.".format(sys.argv[4]))
 			return
 	
+	# only opens the data socket if the server says the command is valid
 	# open the data socket for the server to send its response
 	data_socket = createSocket()
 
@@ -118,7 +122,7 @@ def talkToServer(client_socket):
 if __name__ == "__main__":
 	# light input validation
 	if len(sys.argv) < 5 or len(sys.argv) > 6:
-		print("You must specify either five or six arguments.")
+		print("Invalid Number of Arguments. There should only be 5 OR 6 arguments.")
 		exit(1)
 		
 	elif (int(sys.argv[2]) < 10000 or int(sys.argv[2]) > 65535):

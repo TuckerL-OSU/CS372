@@ -7,6 +7,7 @@
 // I was also able to reuse some of my code from P1 and from a past class.
 // Help recieved from friend Dan Drapp
 // Noted within is extra help I needed/found.
+// Also failed attempts to make the code more modular
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -107,7 +108,7 @@ int estConnection(int sockfd, struct addrinfo *conn) {
 
 // directory navigation: https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c
 // ignore not files: https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html
-int getDirectory(char** files) {
+int getNumFilesInDir(char** files) {
 	DIR* fd;
 	struct dirent *dir;
 	fd = opendir(".");
@@ -296,6 +297,7 @@ void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) {
 //
 //}
 
+// good/bad taken from another project I saw while 
 void talkToClient(int clientfd) {
 	// used to tell the client if their request was valid or not
 	char *good = "valid";
@@ -334,12 +336,13 @@ void talkToClient(int clientfd) {
 		recv(clientfd, filename, sizeof(filename) - 1, 0);
 		printf("Client requested file: %s\n", filename);
 
+		// get the list of files in the directory
 		char **files = initContainer_filesInDir(500);
-		int numFiles = getDirectory(files);
+		int numFiles = getNumFilesInDir(files);
 		int fileFound = checkForChosenFile(filename, files, numFiles);
 		if (fileFound) {
 			printf("File found. Sending \"%s\" to Client.\n", filename);
-			char *file_found = "File found";
+			char *file_found = "File Found";
 			send(clientfd, file_found, strlen(file_found), 0);
 
 			// declare file name and clean it
@@ -355,7 +358,7 @@ void talkToClient(int clientfd) {
 		}
 		else {
 			printf("Unknown file: %s.\n", filename);
-			char *not_found = "File not found";
+			char *not_found = "File Not Found";
 			send(clientfd, not_found, strlen(not_found), 0);
 		}
 		deleteContainer_filesInDir(files, 500);
@@ -367,7 +370,7 @@ void talkToClient(int clientfd) {
 
 		char **files = initContainer_filesInDir(500);
 
-		int numFiles = getDirectory(files);
+		int numFiles = getNumFilesInDir(files);
 
 		sendDirectory(addr, port, files, numFiles);
 
