@@ -100,7 +100,7 @@ def talkToServer(client_socket):
 		client_socket.send(sys.argv[4])
 		response = client_socket.recv(1024)
 		# check if the server found the file we requested
-		if response != "File Found": 
+		if response != "File found": 
 			print("Server couldn't find {}.".format(sys.argv[4]))
 			return
 	
