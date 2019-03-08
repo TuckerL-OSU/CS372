@@ -7,7 +7,7 @@
 // I was also able to reuse some of my code from P1 and from a past class.
 // Help recieved from friend Dan Drapp
 // Noted within is extra help I needed/found.
-// Also failed attempts to make the code more modular 
+// Also failed attempts to make the code more modular
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -114,10 +114,10 @@ int getNumFilesInDir(char** files) {
 	int i = 0;
 	if (fd) {
 		while ((dir = readdir(fd)) != NULL) {
-			//if (/*!strcmp(dir->d_name, ".") == 0 ||*/ !strcmp(dir->d_name, "..") == 0) {
+			if (!strcmp(dir->d_name, ".") == 0 || !strcmp(dir->d_name, "..") == 0) {
 				strcpy(files[i], dir->d_name);
 				i++;
-			//}
+			}
 		}
 		closedir(fd);
 	}
