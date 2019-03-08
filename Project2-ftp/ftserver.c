@@ -342,7 +342,7 @@ void talkToClient(int clientfd) {
 		int fileFound = checkForChosenFile(filename, files, numFiles);
 		if (fileFound) {
 			printf("File found. Sending \"%s\" to Client.\n", filename);
-			char *file_found = "File Found";
+			char *file_found = "File found";
 			send(clientfd, file_found, strlen(file_found), 0);
 
 			// declare file name and clean it
@@ -358,7 +358,7 @@ void talkToClient(int clientfd) {
 		}
 		else {
 			printf("Unknown file: %s.\n", filename);
-			char *not_found = "File Not Found";
+			char *not_found = "File not found";
 			send(clientfd, not_found, strlen(not_found), 0);
 		}
 		deleteContainer_filesInDir(files, 500);
