@@ -114,7 +114,7 @@ int getNumFilesInDir(char** files) {
 	int i = 0;
 	if (fd) {
 		while ((dir = readdir(fd)) != NULL) {
-			if (!strcmp(dir->d_name, ".") == 0 || !strcmp(dir->d_name, "..") == 0) {
+			if (/*!strcmp(dir->d_name, ".") == 0 ||*/ !strcmp(dir->d_name, "..") == 0) {
 				strcpy(files[i], dir->d_name);
 				i++;
 			}
