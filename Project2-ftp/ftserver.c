@@ -298,7 +298,6 @@ void sendDirectory(char *addr, char *port, char **directory, int numOfFiles) {
 //
 //}
 
-// good/bad taken from another project I saw while 
 void talkToClient(int clientfd) {
 	// used to tell the client if their request was valid or not
 	char *good = "valid";
