@@ -56,7 +56,7 @@ def fileHandler(data_socket):
 		fd.write(buffer)
 		buffer = data_socket.recv(1000)
 
-	print("Finished receiving File {} from Server.".format(sys.argv[4]))
+	#print("Finished receiving File {} from Server.".format(sys.argv[4]))
 
 
 def getList(data_socket):
@@ -66,8 +66,6 @@ def getList(data_socket):
 	while filename != "end_of_list":        
 		print(filename)
 		filename = data_socket.recv(100)
-
-	print("Finished receiving Directory List from Server.")
 
 
 def talkToServer(client_socket): 
