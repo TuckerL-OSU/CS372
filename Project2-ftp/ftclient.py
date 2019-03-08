@@ -48,31 +48,35 @@ def getMyIP():
 
 
 def fileHandler(data_socket):
-    fd = open(sys.argv[4], "w+")   
-    buffer = data_socket.recv(1000)
-    
+	fd = open(sys.argv[4], "w+")   
+	buffer = data_socket.recv(1000)
+	
 	# keep ingesting file while end of transfer hasn't been hit
-    while "end_of_file" not in buffer:
-        fd.write(buffer)
-        buffer = data_socket.recv(1000)
-        
-        
+	while "end_of_file" not in buffer:
+		fd.write(buffer)
+		buffer = data_socket.recv(1000)
+
+	print("Finished receiving File {} from Server.".format(sys.argv[4]))
+
+
 def getList(data_socket):
-    filename = data_socket.recv(100)
-    
+	filename = data_socket.recv(100)
+	
 	# keep ingesting list while end of transfer hasn't been hit
-    while filename != "end_of_list":        
-        print(filename)
-        filename = data_socket.recv(100)
+	while filename != "end_of_list":        
+		print(filename)
+		filename = data_socket.recv(100)
+
+	print("Finished receiving Directory List from Server.")
 
 
 def talkToServer(client_socket): 
     # get port based off of command 
 	if sys.argv[3] == "-g": 
-		print("Reqesting file: {}".format(sys.argv[4]))
+		print("Reqesting File: {}".format(sys.argv[4]))
 		port = 5
 	elif sys.argv[3] == "-l":
-		print("Requesting list.")
+		print("Requesting Directory List.")
 		port = 4
 
 	# send port number
