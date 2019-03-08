@@ -107,7 +107,6 @@ int estConnection(int sockfd, struct addrinfo *conn) {
 }
 
 // directory navigation: https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c
-// ignore not files: https://www.gnu.org/software/libc/manual/html_node/Directory-Entries.html
 int getNumFilesInDir(char** files) {
 	DIR* fd;
 	struct dirent *dir;
@@ -115,8 +114,7 @@ int getNumFilesInDir(char** files) {
 	int i = 0;
 	if (fd) {
 		while ((dir = readdir(fd)) != NULL) {
-			// only get regular files (ignores . and ..)
-			if (dir->d_type == DT_REG) {
+			if (!strcmp(dir->d_name, ".") == 0 || !strcmp(dir->d_name, "..") == 0) {
 				strcpy(files[i], dir->d_name);
 				i++;
 			}
