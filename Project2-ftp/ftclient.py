@@ -122,7 +122,7 @@ if __name__ == "__main__":
 		exit(1)
 		
 	elif (int(sys.argv[2]) < 10000 or int(sys.argv[2]) > 65535):
-		print("Please enter a port number in the range 1024-65535")
+		print("Please enter a port number in the range 10000-65535.")
 		exit(1)
 		
 	elif (sys.argv[3] != "-g" and sys.argv[3] != "-l"):
@@ -133,7 +133,7 @@ if __name__ == "__main__":
 		exit(1)
 		
 	elif (sys.argv[3] == "-g" and (int(sys.argv[5]) < 10000 or int(sys.argv[5]) > 65535)):        
-		print("Please enter correct port number.")
+		print("Please enter a port number in the range 10000-65535.")
 		exit(1)
 	
 	client_socket = estConnection()
