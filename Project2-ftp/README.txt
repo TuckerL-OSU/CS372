@@ -5,6 +5,7 @@ Project 2 - FTP
 This program was tested to work on all Flip servers.
 
 This program will work, whether or not server and client are in separate directories.
+However, there can be strange behavior if they are in the same directory.
 Compile:
 	If they are in the same directory: type make in the command line
 	If they are in separate directories: 
